@@ -12,51 +12,51 @@ import Link from 'next/link';
 
 const medicalCourses = [
   {
+    id: 'entendiendo-su-diagnostico',
     title: 'Entendiendo su Diagnóstico',
     description:
       'Aprenda más sobre su condición, opciones de tratamiento y qué esperar.',
     imageUrl: 'https://picsum.photos/600/400?random=1',
     imageHint: 'gráfico médico',
-    link: '#',
   },
   {
+    id: 'nutricion-vida-saludable',
     title: 'Nutrición para una Vida Saludable',
     description:
       'Descubra las mejores opciones dietéticas para apoyar su salud y recuperación.',
       imageUrl: 'https://picsum.photos/600/400?random=2',
       imageHint: 'comida saludable',
-    link: '#',
   },
   {
+    id: 'guia-cuidados-postoperatorios',
     title: 'Guía de Cuidados Postoperatorios',
     description: 'Una guía paso a paso para asegurar una recuperación sin problemas después de la cirugía.',
     imageUrl: 'https://picsum.photos/600/400?random=3',
     imageHint: 'recuperación del paciente',
-    link: '#',
   },
 ];
 
 const systemCourses = [
     {
+      id: 'capacitacion-sistema-medicos',
       title: 'Capacitación del Sistema para Médicos',
       description: 'Aprenda a utilizar todas las funciones de MediFlow para optimizar la atención al paciente.',
       imageUrl: 'https://picsum.photos/600/400?random=4',
       imageHint: 'doctor computadora',
-      link: '#',
     },
     {
+      id: 'guia-administradores',
       title: 'Guía para Administradores',
       description: 'Gestione equipos, configuraciones y supervise el rendimiento de la plataforma.',
       imageUrl: 'https://picsum.photos/600/400?random=5',
       imageHint: 'panel de control',
-      link: '#',
     },
     {
+      id: 'integracion-n8n',
       title: 'Integración con n8n',
       description: 'Aprenda a conectar MediFlow con otras aplicaciones utilizando n8n para automatizar flujos de trabajo.',
       imageUrl: 'https://picsum.photos/600/400?random=6',
       imageHint: 'automatización de flujo de trabajo',
-      link: '#',
     },
 ]
 
@@ -88,7 +88,7 @@ export default function CoursesPage() {
             </div>
             <CardFooter>
               <Button asChild className="w-full">
-                <Link href={course.link}>Iniciar Curso</Link>
+                <Link href={`/courses/${course.id}`}>Ver Curso</Link>
               </Button>
             </CardFooter>
           </Card>
@@ -119,7 +119,7 @@ export default function CoursesPage() {
             </div>
             <CardFooter>
               <Button asChild className="w-full">
-                <Link href={course.link}>Iniciar Capacitación</Link>
+                <Link href={`/courses/${course.id}`}>Ver Capacitación</Link>
               </Button>
             </CardFooter>
           </Card>
