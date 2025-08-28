@@ -18,31 +18,8 @@ import { es } from 'date-fns/locale';
 import Link from 'next/link';
 import { WhatsAppIcon } from '@/components/whatsapp-icon';
 import { useRouter } from 'next/navigation';
-
-type Appointment = {
-  name: string;
-  time: string;
-  type: string;
-  date: Date;
-  status: 'Confirmada' | 'Pendiente' | 'Cancelada';
-};
-
-const initialAppointments: Appointment[] = [
-  {
-    name: 'Liam Johnson',
-    time: '10:00 AM',
-    type: 'Consulta',
-    date: new Date(2024, 6, 23),
-    status: 'Confirmada',
-  },
-  {
-    name: 'Noah Williams',
-    time: '11:30 AM',
-    type: 'Revisión',
-    date: new Date(2024, 6, 23),
-    status: 'Confirmada',
-  },
-];
+import { useAtom } from 'jotai';
+import { appointmentsAtom, Appointment } from '@/lib/state';
 
 const holidays = [
     new Date(2024, 0, 1), // Año Nuevo
@@ -51,7 +28,7 @@ const holidays = [
 ];
 
 export default function AppointmentsPage() {
-  const [appointments] = useState<Appointment[]>(initialAppointments);
+  const [appointments] = useAtom(appointmentsAtom);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
@@ -96,7 +73,7 @@ export default function AppointmentsPage() {
                 modifiers={{
                     sunday: (date) => isSunday(date),
                     holiday: holidays,
-                    disabled: (date) => date < new Date() || isSunday(date) || holidays.some(h => format(h, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'))
+                    disabled: (date) => date < new Date(new Date().setDate(new Date().getDate() - 1)) || isSunday(date) || holidays.some(h => format(h, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'))
                 }}
                  modifiersClassNames={{
                     sunday: 'text-red-500 bg-red-500/10 font-bold',
@@ -118,8 +95,8 @@ export default function AppointmentsPage() {
           </CardHeader>
           <CardContent className="space-y-4 max-h-[60vh] overflow-y-auto">
             {appointments.length > 0 ? (
-              appointments
-                .sort((a, b) => a.date.getTime() - b.date.getTime())
+              [...appointments]
+                .sort((a, b) => new Date(a.date).setHours(parseInt(a.time.split(':')[0]), parseInt(a.time.split(':')[1].slice(0,2))) - new Date(b.date).setHours(parseInt(b.time.split(':')[0]), parseInt(b.time.split(':')[1].slice(0,2))))
                 .map((appt, index) => (
                   <div
                     key={`${appt.name}-${index}`}
@@ -136,7 +113,7 @@ export default function AppointmentsPage() {
                     <div className="flex-1">
                       <p className="font-semibold">{appt.name}</p>
                       <p className="text-sm text-muted-foreground">
-                       {format(appt.date, 'PPP p', { locale: es })}
+                       {format(new Date(appt.date), 'PPP', { locale: es })} - {appt.time}
                       </p>
                     </div>
                      <Badge

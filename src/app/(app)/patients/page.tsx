@@ -17,6 +17,15 @@ import {
 } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { AiFollowUpGenerator } from '@/components/patients/ai-follow-up-generator';
+import { MoreHorizontal } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const patients = [
   {
@@ -75,8 +84,8 @@ export default function PatientsPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Paciente</TableHead>
-              <TableHead>Estado</TableHead>
-              <TableHead>Última Visita</TableHead>
+              <TableHead className="hidden md:table-cell">Estado</TableHead>
+              <TableHead className="hidden md:table-cell">Última Visita</TableHead>
               <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
           </TableHeader>
@@ -93,13 +102,13 @@ export default function PatientsPage() {
                       <p className="text-sm font-medium leading-none">
                         {patient.name}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground md:hidden">
                         {patient.email}
                       </p>
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>
+                <TableCell className="hidden md:table-cell">
                   <Badge
                     variant={patient.status === 'Activo' ? 'default' : 'secondary'}
                      className={patient.status === 'Activo' ? 'bg-green-600/20 text-green-700 border-green-600/20' : ''}
@@ -107,9 +116,25 @@ export default function PatientsPage() {
                     {patient.status}
                   </Badge>
                 </TableCell>
-                <TableCell>{patient.lastVisit}</TableCell>
+                <TableCell className="hidden md:table-cell">{patient.lastVisit}</TableCell>
                 <TableCell className="text-right">
-                    <AiFollowUpGenerator patient={patient} />
+                    <div className="flex items-center justify-end gap-2">
+                        <AiFollowUpGenerator patient={patient} />
+                        <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button aria-haspopup="true" size="icon" variant="ghost">
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Toggle menu</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                            <DropdownMenuItem>Ver Perfil</DropdownMenuItem>
+                            <DropdownMenuItem>Editar</DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive">Eliminar</DropdownMenuItem>
+                        </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 </TableCell>
               </TableRow>
             ))}

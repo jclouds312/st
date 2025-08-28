@@ -18,6 +18,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { appointmentsAtom, Appointment } from '@/lib/state';
+import { useAtom } from 'jotai';
 
 const availableTimes = [
   '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
@@ -29,6 +31,8 @@ export default function BookAppointmentPage() {
   const params = useParams();
   const { date } = params;
   const { toast } = useToast();
+  const [, setAppointments] = useAtom(appointmentsAtom);
+
 
   const selectedDate = parse(date as string, 'yyyy-MM-dd', new Date());
 
@@ -51,13 +55,18 @@ export default function BookAppointmentPage() {
       });
       return;
     }
-    // Lógica para guardar la cita...
-    console.log({
-      date: selectedDate,
-      time: selectedTime,
-      name: patientName,
-      email: patientEmail,
-    });
+
+    const newAppointment: Appointment = {
+        name: patientName,
+        time: selectedTime!,
+        type: 'Consulta',
+        date: selectedDate,
+        status: 'Confirmada'
+    }
+
+    // Lógica para guardar la cita (simulada con Jotai)
+    setAppointments((prev) => [...prev, newAppointment]);
+    
     setIsConfirmed(true);
      toast({
         title: 'Cita Confirmada',

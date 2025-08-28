@@ -85,12 +85,20 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
   }
 
   function handleCopyToClipboard() {
+    if (!generatedMessage) return;
     navigator.clipboard.writeText(generatedMessage);
     toast({
       title: 'Copiado al Portapapeles',
       description: 'Mensaje listo para ser pegado.',
     });
   }
+
+  function handleSendWhatsApp() {
+     if (!generatedMessage) return;
+     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(generatedMessage)}`;
+     window.open(whatsappUrl, '_blank');
+  }
+
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -117,7 +125,7 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
                   <FormItem>
                     <FormLabel>Nombre del Paciente</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} readOnly />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -169,7 +177,7 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
               <CardHeader>
                 <CardTitle className="text-base">Mensaje Generado</CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
+              <CardContent className="text-sm text-muted-foreground min-h-[200px]">
                 {isLoading && (
                    <div className="flex items-center justify-center h-full">
                       <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -193,7 +201,7 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
                   <Clipboard className="mr-2 h-4 w-4" />
                   Copiar
                 </Button>
-                <Button className="w-full">
+                <Button onClick={handleSendWhatsApp} className="w-full">
                   <WhatsAppIcon className="mr-2 h-4 w-4" />
                   Enviar por WhatsApp
                 </Button>

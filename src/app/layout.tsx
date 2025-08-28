@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import { Inter } from 'next/font/google';
 import { AuthProvider } from '@/context/auth-context';
+import { JotaiProvider } from '@/context/jotai-provider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -26,10 +27,12 @@ export default function RootLayout({
       <head>
       </head>
       <body className={cn('font-sans antialiased', 'min-h-screen bg-background')}>
-        <AuthProvider>
-            {children}
-            <Toaster />
-        </AuthProvider>
+        <JotaiProvider>
+          <AuthProvider>
+              {children}
+              <Toaster />
+          </AuthProvider>
+        </JotaiProvider>
       </body>
     </html>
   );
