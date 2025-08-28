@@ -1,4 +1,6 @@
 
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -27,6 +29,9 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Webhook, Bot } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/whatsapp-icon';
+import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const teamMembers = [
     { name: "Dr. Evelyn Reed", email: "evelyn.reed@mediflow.com", role: "Médico" },
@@ -35,16 +40,36 @@ const teamMembers = [
 ]
 
 export default function SettingsPage() {
+  const { toast } = useToast();
+  const [isWhatsAppConnected, setIsWhatsAppConnected] = useState(false);
+  const [isN8nConnected, setIsN8nConnected] = useState(false);
+
+  const handleConnectWhatsApp = () => {
+    setIsWhatsAppConnected(true);
+    toast({
+      title: 'WhatsApp Conectado',
+      description: 'Tu número ha sido conectado exitosamente (simulado).',
+    });
+  }
+
+  const handleConnectN8n = () => {
+    setIsN8nConnected(true);
+    toast({
+      title: 'n8n Conectado',
+      description: 'La integración con n8n ahora está activa (simulado).',
+    });
+  }
+
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Configuración</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Configuración</h1>
         <p className="text-muted-foreground">
           Gestiona tu cuenta, equipo y configuración de la aplicación.
         </p>
       </div>
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList>
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
           <TabsTrigger value="profile">Perfil</TabsTrigger>
           <TabsTrigger value="team">Gestionar Equipo</TabsTrigger>
           <TabsTrigger value="whatsapp">WhatsApp</TabsTrigger>
@@ -131,14 +156,41 @@ export default function SettingsPage() {
               </div>
             </CardContent>
             <CardFooter className="justify-between">
-              <Button>
+              <Button onClick={handleConnectWhatsApp} disabled={isWhatsAppConnected}>
                 <WhatsAppIcon className="mr-2 h-4 w-4" />
-                Conectar WhatsApp
+                {isWhatsAppConnected ? "Conectado" : "Conectar WhatsApp"}
               </Button>
-               <Button variant="secondary">
-                <Bot className="mr-2 h-4 w-4" />
-                Configurar Chatbot
-              </Button>
+               <Dialog>
+                <DialogTrigger asChild>
+                    <Button variant="secondary">
+                      <Bot className="mr-2 h-4 w-4" />
+                      Configurar Chatbot
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Configurar Chatbot de IA</DialogTitle>
+                    <DialogDescription>
+                      Define respuestas automáticas y flujos de conversación inteligentes. Esta es una demostración.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                     <div className="space-y-2">
+                        <Label>Disparador del Flujo</Label>
+                        <Input placeholder="Ej: 'Hola', 'Quiero una cita'" />
+                        <p className="text-xs text-muted-foreground">Palabras clave que inician la automatización.</p>
+                      </div>
+                       <div className="space-y-2">
+                        <Label>Respuesta de la IA</Label>
+                        <Textarea placeholder="Ej: '¡Hola! Gracias por contactarnos. ¿En qué podemos ayudarte hoy: agendar una cita, consultar resultados o hablar con un especialista?'" />
+                         <p className="text-xs text-muted-foreground">El mensaje que enviará la IA. Puedes ofrecer opciones.</p>
+                      </div>
+                  </div>
+                   <DialogFooter>
+                    <Button onClick={() => toast({ title: 'Flujo Guardado', description: 'Tu configuración del chatbot ha sido guardada (simulado).' })}>Guardar Flujo</Button>
+                  </DialogFooter>
+                </DialogContent>
+               </Dialog>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -182,10 +234,10 @@ export default function SettingsPage() {
                <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-4">
                     <div className='flex items-center gap-2'>
-                        <Webhook className="h-6 w-6" />
-                        <CardTitle className="text-xl">n8n</CardTitle>
+                        <Webhook className="h-8 w-8" />
+                        <CardTitle className="text-2xl">n8n</CardTitle>
                     </div>
-                    <Button>Conectar</Button>
+                    <Button onClick={handleConnectN8n} disabled={isN8nConnected}>{isN8nConnected ? "Conectado" : "Conectar"}</Button>
                 </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">
