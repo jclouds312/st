@@ -20,6 +20,8 @@ import { WhatsAppIcon } from '@/components/whatsapp-icon';
 import { useRouter } from 'next/navigation';
 import { useAtom } from 'jotai';
 import { appointmentsAtom, Appointment } from '@/lib/state';
+import { ManualAppointmentForm } from '@/components/appointments/manual-appointment-form';
+import { CalendarPlus } from 'lucide-react';
 
 const holidays = [
     new Date(2024, 0, 1), // Año Nuevo
@@ -59,7 +61,7 @@ export default function AppointmentsPage() {
             <CardHeader>
                 <CardTitle>Agendar Nueva Cita</CardTitle>
                 <CardDescription>
-                    Selecciona un día en el calendario para ver los horarios disponibles.
+                    Selecciona un día en el calendario o agenda una cita manualmente.
                 </CardDescription>
             </CardHeader>
             <CardContent className="p-2">
@@ -86,12 +88,22 @@ export default function AppointmentsPage() {
       <div className="md:col-span-1 space-y-6">
         <Card className='sticky top-4'>
           <CardHeader>
-            <CardTitle>
-              Próximas Citas
-            </CardTitle>
-            <CardDescription>
-              Un resumen de tus citas confirmadas.
-            </CardDescription>
+            <div className='flex items-center justify-between'>
+                <div>
+                    <CardTitle>
+                      Próximas Citas
+                    </CardTitle>
+                    <CardDescription>
+                      Un resumen de tus citas confirmadas.
+                    </CardDescription>
+                </div>
+                <ManualAppointmentForm>
+                    <Button size="icon" variant="outline">
+                        <CalendarPlus className="h-5 w-5" />
+                        <span className="sr-only">Agendar Cita Manualmente</span>
+                    </Button>
+                </ManualAppointmentForm>
+            </div>
           </CardHeader>
           <CardContent className="space-y-4 max-h-[60vh] overflow-y-auto">
             {appointments.length > 0 ? (
