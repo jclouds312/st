@@ -10,7 +10,12 @@ import { cn } from "@/lib/utils"
 import { Button, type ButtonProps } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Sheet, SheetContent } from "@/components/ui/sheet"
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   Tooltip,
@@ -206,6 +211,9 @@ const Sidebar = React.forwardRef<
             }
             side={side}
           >
+            <SheetHeader className="p-2">
+              <SheetTitle className="sr-only">Menu</SheetTitle>
+            </SheetHeader>
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>
         </Sheet>
@@ -259,30 +267,22 @@ const Sidebar = React.forwardRef<
 )
 Sidebar.displayName = "Sidebar"
 
-const SidebarTrigger = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, children, ...props }, ref) => {
-    const { toggleSidebar } = useSidebar()
-
-    return (
-      <Button
-        ref={ref}
-        data-sidebar="trigger"
-        variant="ghost"
-        size="icon"
-        className={cn("h-7 w-7", className)}
-        onClick={toggleSidebar}
-        {...props}
-      >
-        {children || (
-          <>
-            <PanelLeft />
-            <span className="sr-only">Toggle Sidebar</span>
-          </>
-        )}
-      </Button>
-    )
-  }
-)
+const SidebarTrigger = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentProps<typeof Button>
+>(({ className, ...props }, ref) => {
+  const { toggleSidebar } = useSidebar()
+  return (
+    <Button
+      ref={ref}
+      onClick={toggleSidebar}
+      className={className}
+      variant="ghost"
+      size="icon"
+      {...props}
+    />
+  )
+})
 SidebarTrigger.displayName = "SidebarTrigger"
 
 const SidebarRail = React.forwardRef<
