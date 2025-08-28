@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components//ui/avatar';
 import {
   Dialog,
   DialogContent,
@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { format, parse } from 'date-fns';
+import { format, parse, isSunday } from 'date-fns';
 import { es } from 'date-fns/locale';
 import Link from 'next/link';
 import { WhatsAppIcon } from '@/components/whatsapp-icon';
@@ -43,7 +43,7 @@ const initialAppointments: Appointment[] = [
     name: 'Liam Johnson',
     time: '10:00 AM',
     type: 'Consulta',
-    date: new Date(2024, 6, 23), // Note: month is 0-indexed, so 6 is July
+    date: new Date(2024, 6, 23),
     status: 'Confirmada',
   },
   {
@@ -81,6 +81,12 @@ const initialAppointments: Appointment[] = [
     date: new Date(2024, 6, 25),
     status: 'Confirmada',
   },
+];
+
+const holidays = [
+    new Date(2024, 0, 1), // Año Nuevo
+    new Date(2024, 4, 1), // Día del Trabajo
+    new Date(2024, 11, 25), // Navidad
 ];
 
 export default function AppointmentsPage() {
@@ -135,19 +141,39 @@ export default function AppointmentsPage() {
     DayContent: ({ date }) => {
       const hasAppointments = appointments.some(d => format(d.date, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'));
       return (
-        <div className="relative h-full w-full">
+        <div className="relative h-full w-full flex items-center justify-center">
             <span>{format(date, 'd')}</span>
-            {hasAppointments && <div className="absolute bottom-1 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-primary" />}
+            {hasAppointments && <div className="absolute bottom-1 h-1.5 w-1.5 rounded-full bg-primary" />}
         </div>
       );
     },
   };
 
   return (
-    <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-      <div className="md:col-span-1">
-        <div className="space-y-6">
-          <Card>
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-5">
+      <div className="md:col-span-3">
+        <Card>
+            <CardContent className="p-2">
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={handleDateSelect}
+                onDayDoubleClick={handleDayDoubleClick}
+                className="w-full"
+                locale={es}
+                components={DayContent}
+                modifiers={{
+                    sunday: (date) => isSunday(date),
+                    holiday: holidays,
+                }}
+                 modifiersClassNames={{
+                    sunday: 'text-red-500 font-bold',
+                    holiday: 'text-blue-500 font-bold bg-blue-50',
+                }}
+              />
+            </CardContent>
+        </Card>
+         <Card className='mt-8'>
             <CardHeader>
               <CardTitle>Crear Cita</CardTitle>
               <CardDescription>
@@ -170,57 +196,28 @@ export default function AppointmentsPage() {
               </Button>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-0">
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={handleDateSelect}
-                onDayDoubleClick={handleDayDoubleClick}
-                className="w-full"
-                locale={es}
-                components={DayContent}
-              />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Estadísticas</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex justify-between">
-                <CardDescription>Esta Semana</CardDescription>
-                <span className="font-bold">25</span>
-              </div>
-              <div className="flex justify-between">
-                <CardDescription>Este Mes</CardDescription>
-                <span className="font-bold">120</span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </div>
       <div className="md:col-span-2">
-        <Card>
+        <Card className='sticky top-4'>
           <CardHeader>
             <CardTitle>
               {selectedDate
                 ? `Citas para ${format(selectedDate, 'PPP', { locale: es })}`
-                : 'Todas las Citas'}
+                : 'Selecciona una fecha'}
             </CardTitle>
             <CardDescription>
               {selectedDate
-                ? 'Mostrando citas para el día seleccionado. Haz doble clic en un día del calendario para agregar una nueva cita.'
-                : 'Un resumen de todas tus citas.'}
+                ? 'Mostrando citas para el día seleccionado. Haz doble clic en un día para agregar una cita.'
+                : 'Un resumen de tus citas.'}
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            {appointmentsForSelectedDay.length > 0 ? (
+          <CardContent className="space-y-6 max-h-[70vh] overflow-y-auto">
+            {selectedDate && appointmentsForSelectedDay.length > 0 ? (
               appointmentsForSelectedDay
                 .sort((a, b) => a.date.getTime() - b.date.getTime())
-                .map((appt) => (
+                .map((appt, index) => (
                   <div
-                    key={appt.name + appt.time}
+                    key={`${appt.name}-${index}`}
                     className="flex items-center space-x-4 rounded-lg border p-4"
                   >
                     <Avatar>
@@ -261,9 +258,11 @@ export default function AppointmentsPage() {
                   </div>
                 ))
             ) : (
-              <p className="text-center text-muted-foreground">
-                No hay citas para este día.
-              </p>
+               <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 p-12 text-center h-64">
+                    <p className="text-muted-foreground">
+                       {selectedDate ? "No hay citas para este día." : "Selecciona un día para ver las citas."}
+                    </p>
+                </div>
             )}
           </CardContent>
         </Card>
