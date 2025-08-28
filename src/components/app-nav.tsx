@@ -8,6 +8,7 @@ import {
   MessageSquare,
   Settings,
   Users,
+  Webhook,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -48,11 +49,11 @@ export function AppNav() {
               <SidebarMenuItem key={link.href}>
                 <Link href={link.href}>
                   <SidebarMenuButton
-                    className="w-full justify-start"
+                    className="w-full justify-start text-base"
                     isActive={pathname.startsWith(link.href)}
                     tooltip={link.label}
                   >
-                    <link.icon className="mr-2 h-4 w-4" />
+                    <link.icon className="mr-2 h-5 w-5" />
                     <span>{link.label}</span>
                   </SidebarMenuButton>
                 </Link>
@@ -65,11 +66,11 @@ export function AppNav() {
              <SidebarMenuItem>
                 <Link href="/settings">
                   <SidebarMenuButton
-                    className="w-full justify-start"
-                    isActive={pathname === '/settings'}
+                    className="w-full justify-start text-base"
+                    isActive={pathname.startsWith('/settings')}
                     tooltip="Configuración"
                   >
-                    <Settings className="mr-2 h-4 w-4" />
+                    <Settings className="mr-2 h-5 w-5" />
                     <span>Configuración</span>
                   </SidebarMenuButton>
                 </Link>
