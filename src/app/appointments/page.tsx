@@ -15,6 +15,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import Link from 'next/link';
+import { WhatsAppIcon } from '@/components/whatsapp-icon';
 
 const allAppointments = [
   {
@@ -77,9 +79,15 @@ export default function AppointmentsPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Crear Cita</CardTitle>
+                     <CardDescription>Agenda tu cita directamente por WhatsApp.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Button className="w-full">Agendar Nueva Cita</Button>
+                    <Button className="w-full" asChild>
+                        <Link href="https://wa.me/1234567890?text=Hola%2C%20me%20gustar%C3%ADa%20agendar%20una%20nueva%20cita." target="_blank">
+                             <WhatsAppIcon className="mr-2 h-4 w-4" />
+                            Agendar por WhatsApp
+                        </Link>
+                    </Button>
                 </CardContent>
             </Card>
             <Card>
