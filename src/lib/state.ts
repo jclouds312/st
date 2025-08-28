@@ -1,6 +1,10 @@
+
 import { atom } from 'jotai';
+import { collection, query, where, getDocs, Timestamp, addDoc, onSnapshot } from 'firebase/firestore';
+import { db } from './firebase';
 
 export type Appointment = {
+  id?: string;
   name: string;
   time: string;
   type: string;
@@ -8,21 +12,41 @@ export type Appointment = {
   status: 'Confirmada' | 'Pendiente' | 'Cancelada';
 };
 
-const initialAppointments: Appointment[] = [
-  {
-    name: 'Liam Johnson',
-    time: '10:00 AM',
-    type: 'Consulta',
-    date: new Date(2024, 6, 23),
-    status: 'Confirmada',
-  },
-  {
-    name: 'Noah Williams',
-    time: '11:30 AM',
-    type: 'Revisión',
-    date: new Date(2024, 6, 23),
-    status: 'Confirmada',
-  },
-];
+// This atom will hold the appointments fetched from Firestore
+export const appointmentsAtom = atom<Appointment[]>([]);
 
-export const appointmentsAtom = atom<Appointment[]>(initialAppointments);
+// Atom to get appointments from firestore
+export const getAppointmentsAtom = atom(
+  (get) => get(appointmentsAtom),
+  (_get, set) => {
+    const q = query(collection(db, "appointments"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const appointments: Appointment[] = [];
+      querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          appointments.push({
+              id: doc.id,
+              ...data,
+              date: (data.date as Timestamp).toDate(),
+          } as Appointment);
+      });
+      set(appointmentsAtom, appointments);
+    });
+    return unsubscribe;
+  }
+);
+
+
+export const addAppointmentAtom = atom(
+  null,
+  async (_get, _set, newAppointment: Omit<Appointment, 'id'>) => {
+    try {
+      await addDoc(collection(db, "appointments"), {
+        ...newAppointment,
+        date: Timestamp.fromDate(newAppointment.date)
+      });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }
+);

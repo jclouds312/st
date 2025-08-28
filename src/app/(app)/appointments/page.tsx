@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -18,10 +18,11 @@ import { es } from 'date-fns/locale';
 import Link from 'next/link';
 import { WhatsAppIcon } from '@/components/whatsapp-icon';
 import { useRouter } from 'next/navigation';
-import { useAtom } from 'jotai';
-import { appointmentsAtom, Appointment } from '@/lib/state';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { appointmentsAtom, getAppointmentsAtom, Appointment } from '@/lib/state';
 import { ManualAppointmentForm } from '@/components/appointments/manual-appointment-form';
 import { CalendarPlus } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const holidays = [
     new Date(2024, 0, 1), // Año Nuevo
@@ -30,11 +31,20 @@ const holidays = [
 ];
 
 export default function AppointmentsPage() {
-  const [appointments] = useAtom(appointmentsAtom);
+  const appointments = useAtomValue(appointmentsAtom);
+  const getAppointments = useSetAtom(getAppointmentsAtom);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
   const router = useRouter();
+  
+  useEffect(() => {
+      const unsubscribe = getAppointments();
+      setIsLoading(false);
+      return () => unsubscribe();
+  }, [getAppointments])
 
 
   const handleDateSelect = (date: Date | undefined) => {
@@ -106,12 +116,18 @@ export default function AppointmentsPage() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4 max-h-[60vh] overflow-y-auto">
-            {appointments.length > 0 ? (
+             {isLoading ? (
+                <div className="space-y-4">
+                  <Skeleton className="h-16 w-full" />
+                  <Skeleton className="h-16 w-full" />
+                  <Skeleton className="h-16 w-full" />
+                </div>
+            ) : appointments.length > 0 ? (
               [...appointments]
                 .sort((a, b) => new Date(a.date).setHours(parseInt(a.time.split(':')[0]), parseInt(a.time.split(':')[1].slice(0,2))) - new Date(b.date).setHours(parseInt(b.time.split(':')[0]), parseInt(b.time.split(':')[1].slice(0,2))))
                 .map((appt, index) => (
                   <div
-                    key={`${appt.name}-${index}`}
+                    key={`${appt.id}-${index}`}
                     className="flex items-center space-x-4 rounded-lg border p-3"
                   >
                     <Avatar>

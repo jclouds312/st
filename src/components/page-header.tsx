@@ -60,7 +60,7 @@ export function PageHeader() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>{user?.username || 'Mi Cuenta'}</DropdownMenuLabel>
+          <DropdownMenuLabel>{user?.email || 'Mi Cuenta'}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleSettings}>Configuración</DropdownMenuItem>
           <DropdownMenuItem>Soporte</DropdownMenuItem>

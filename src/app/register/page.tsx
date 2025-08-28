@@ -29,7 +29,7 @@ import Link from 'next/link';
 import { MediFlowLogo } from '@/components/icons';
 
 const formSchema = z.object({
-  username: z.string().min(2, 'El nombre de usuario debe tener al menos 2 caracteres.'),
+  email: z.string().email('El correo electrónico no es válido.'),
   password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres.'),
   confirmPassword: z.string()
 }).refine((data) => data.password === data.confirmPassword, {
@@ -47,7 +47,7 @@ export default function RegisterPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
       confirmPassword: ''
     },
@@ -56,7 +56,7 @@ export default function RegisterPage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const success = await register(values.username, values.password);
+      const success = await register(values.email, values.password);
       if (success) {
         toast({
           title: 'Registro Exitoso',
@@ -64,11 +64,7 @@ export default function RegisterPage() {
         });
         router.push('/login');
       } else {
-        toast({
-          variant: 'destructive',
-          title: 'Error de Registro',
-          description: 'El nombre de usuario ya existe.',
-        });
+        // Error toast is handled in the auth context now
       }
     } catch (error) {
       console.error(error);
@@ -99,12 +95,12 @@ export default function RegisterPage() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
-                name="username"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nombre de Usuario</FormLabel>
+                    <FormLabel>Correo Electrónico</FormLabel>
                     <FormControl>
-                      <Input placeholder="tu-usuario" {...field} />
+                      <Input placeholder="tu@email.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

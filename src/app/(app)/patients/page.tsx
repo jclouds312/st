@@ -1,4 +1,5 @@
 
+'use client';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -28,56 +29,41 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
+import { useEffect, useState } from 'react';
+import { collection, getDocs, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const patients = [
-  {
-    id: 'olivia-martin',
-    name: 'Olivia Martin',
-    email: 'olivia.martin@email.com',
-    lastVisit: '2023-11-20',
-    status: 'Activo',
-    notes: 'La paciente informó sentirse mucho mejor después del último tratamiento. Se recetaron dos semanas más de medicación.',
-    history: 'Historial de alergias estacionales.',
-  },
-  {
-    id: 'jackson-lee',
-    name: 'Jackson Lee',
-    email: 'jackson.lee@email.com',
-    lastVisit: '2023-11-18',
-    status: 'Activo',
-    notes: 'Revisión de rutina. Todos los signos vitales son normales. Se recomendó continuar con el ejercicio regular.',
-    history: 'Sin historial médico significativo.',
-  },
-  {
-    id: 'isabella-nguyen',
-    name: 'Isabella Nguyen',
-    email: 'isabella.nguyen@email.com',
-    lastVisit: '2023-10-05',
-    status: 'Inactivo',
-    notes: 'La paciente no asistió a su última cita de seguimiento programada.',
-    history: 'Tratada previamente por una lesión deportiva menor.',
-  },
-  {
-    id: 'william-kim',
-    name: 'William Kim',
-    email: 'will@email.com',
-    lastVisit: '2023-11-21',
-    status: 'Activo',
-    notes: 'Se discutieron los resultados de las pruebas. Los resultados son positivos. No se necesita ninguna otra acción en este momento.',
-    history: 'N/A',
-  },
-  {
-    id: 'sofia-davis',
-    name: 'Sofia Davis',
-    email: 'sofia.davis@email.com',
-    lastVisit: '2023-09-15',
-    status: 'Inactivo',
-    notes: 'Completó el curso completo de tratamiento.',
-    history: 'Tratada por una infección respiratoria.',
-  },
-];
+type Patient = {
+  id: string;
+  name: string;
+  email: string;
+  lastVisit: string;
+  status: string;
+  notes: string;
+  history: string;
+};
+
 
 export default function PatientsPage() {
+    const [patients, setPatients] = useState<Patient[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchPatients = async () => {
+            setIsLoading(true);
+            const patientsCollection = collection(db, 'patients');
+            const patientSnapshot = await getDocs(patientsCollection);
+            const patientList = patientSnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({
+                id: doc.id,
+                ...doc.data()
+            } as Patient));
+            setPatients(patientList);
+            setIsLoading(false);
+        }
+        fetchPatients();
+    }, [])
+
   return (
     <Card>
       <CardHeader>
@@ -97,8 +83,29 @@ export default function PatientsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {patients.map((patient) => (
-              <TableRow key={patient.email}>
+            {isLoading ? (
+                Array.from({ length: 5 }).map((_, index) => (
+                    <TableRow key={index}>
+                        <TableCell>
+                            <div className='flex items-center gap-3'>
+                                <Skeleton className="h-9 w-9 rounded-full" />
+                                <div className='space-y-2'>
+                                    <Skeleton className="h-4 w-[150px]" />
+                                    <Skeleton className="h-3 w-[180px] md:hidden" />
+                                </div>
+                            </div>
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                            <Skeleton className="h-6 w-[70px] rounded-full" />
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell"><Skeleton className="h-4 w-[100px]" /></TableCell>
+                        <TableCell className="text-right">
+                             <Skeleton className="h-8 w-8 ml-auto" />
+                        </TableCell>
+                    </TableRow>
+                ))
+            ) : patients.map((patient) => (
+              <TableRow key={patient.id}>
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <Avatar className="h-9 w-9">

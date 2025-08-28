@@ -22,72 +22,77 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { AiFollowUpGenerator } from '@/components/patients/ai-follow-up-generator';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { useAtom } from 'jotai';
-import { appointmentsAtom } from '@/lib/state';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { appointmentsAtom, getAppointmentsAtom, Appointment } from '@/lib/state';
+import { useEffect, useState } from 'react';
+import { doc, getDoc, DocumentData } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const patients = [
-  {
-    id: 'olivia-martin',
-    name: 'Olivia Martin',
-    email: 'olivia.martin@email.com',
-    lastVisit: '2023-11-20',
-    status: 'Activo',
-    notes: 'La paciente informó sentirse mucho mejor después del último tratamiento. Se recetaron dos semanas más de medicación.',
-    history: 'Historial de alergias estacionales. Diagnosticada con asma en la infancia.',
-  },
-  {
-    id: 'jackson-lee',
-    name: 'Jackson Lee',
-    email: 'jackson.lee@email.com',
-    lastVisit: '2023-11-18',
-    status: 'Activo',
-    notes: 'Revisión de rutina. Todos los signos vitales son normales. Se recomendó continuar con el ejercicio regular.',
-    history: 'Sin historial médico significativo. No fumador, bebe ocasionalmente.',
-  },
-  {
-    id: 'isabella-nguyen',
-    name: 'Isabella Nguyen',
-    email: 'isabella.nguyen@email.com',
-    lastVisit: '2023-10-05',
-    status: 'Inactivo',
-    notes: 'La paciente no asistió a su última cita de seguimiento programada.',
-    history: 'Tratada previamente por una lesión deportiva menor en la rodilla derecha (2022).',
-  },
-  {
-    id: 'william-kim',
-    name: 'William Kim',
-    email: 'will@email.com',
-    lastVisit: '2023-11-21',
-    status: 'Activo',
-    notes: 'Se discutieron los resultados de las pruebas. Los resultados son positivos. No se necesita ninguna otra acción en este momento.',
-    history: 'Hipertensión diagnosticada en 2021, controlada con medicación.',
-  },
-  {
-    id: 'sofia-davis',
-    name: 'Sofia Davis',
-    email: 'sofia.davis@email.com',
-    lastVisit: '2023-09-15',
-    status: 'Inactivo',
-    notes: 'Completó el curso completo de tratamiento.',
-    history: 'Tratada por una infección respiratoria. Sin alergias conocidas.',
-  },
-];
-
+type Patient = {
+  id: string;
+  name: string;
+  email: string;
+  lastVisit: string;
+  status: string;
+  notes: string;
+  history: string;
+};
 
 export default function PatientProfilePage() {
     const params = useParams();
     const patientId = params.id as string;
-    const [appointments] = useAtom(appointmentsAtom);
+    
+    const allAppointments = useAtomValue(appointmentsAtom);
+    const getAppointments = useSetAtom(getAppointmentsAtom);
 
-    const patient = patients.find(p => p.id === patientId);
+    const [patient, setPatient] = useState<Patient | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-    if (!patient) {
-        notFound();
+    useEffect(() => {
+        const fetchPatient = async () => {
+            if (!patientId) return;
+            setIsLoading(true);
+            const patientDocRef = doc(db, 'patients', patientId);
+            const patientDocSnap = await getDoc(patientDocRef);
+
+            if (patientDocSnap.exists()) {
+                setPatient({ id: patientDocSnap.id, ...patientDocSnap.data() } as Patient);
+            } else {
+                notFound();
+            }
+            setIsLoading(false);
+        }
+        fetchPatient();
+        
+        const unsubscribe = getAppointments();
+        return () => unsubscribe();
+    }, [patientId, getAppointments]);
+
+    if (isLoading || !patient) {
+        return (
+            <div className='space-y-6'>
+                <div className="flex items-center gap-4">
+                    <Skeleton className="h-24 w-24 rounded-full" />
+                    <div className='space-y-2'>
+                        <Skeleton className="h-7 w-48" />
+                        <Skeleton className="h-5 w-64" />
+                        <Skeleton className="h-6 w-20 rounded-full" />
+                    </div>
+                </div>
+                <div className='grid md:grid-cols-2 gap-6'>
+                    <Skeleton className="h-40" />
+                    <Skeleton className="h-40" />
+                </div>
+                <Skeleton className="h-64" />
+                <Skeleton className="h-48" />
+            </div>
+        )
     }
     
-    const patientAppointments = appointments.filter(appt => appt.name.toLowerCase().includes(patient.name.split(' ')[0].toLowerCase()));
+    const patientAppointments = allAppointments.filter(appt => appt.name.toLowerCase().includes(patient.name.split(' ')[0].toLowerCase()));
 
   return (
     <div className="space-y-6">
@@ -193,4 +198,3 @@ export default function PatientProfilePage() {
     </div>
   );
 }
-

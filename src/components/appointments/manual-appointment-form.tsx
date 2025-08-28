@@ -8,8 +8,8 @@ import { z } from 'zod';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
-import { useAtom } from 'jotai';
-import { appointmentsAtom, Appointment } from '@/lib/state';
+import { useSetAtom } from 'jotai';
+import { Appointment, addAppointmentAtom } from '@/lib/state';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -61,7 +61,7 @@ type ManualAppointmentFormValues = z.infer<typeof formSchema>;
 
 export function ManualAppointmentForm({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [, setAppointments] = useAtom(appointmentsAtom);
+  const addAppointment = useSetAtom(addAppointmentAtom);
   const { toast } = useToast();
 
   const form = useForm<ManualAppointmentFormValues>({
@@ -74,7 +74,7 @@ export function ManualAppointmentForm({ children }: { children: React.ReactNode 
     },
   });
 
-  const onSubmit = (data: ManualAppointmentFormValues) => {
+  const onSubmit = async (data: ManualAppointmentFormValues) => {
     // Convert 24h to 12h format for display
      const [hour, minute] = data.time.split(':');
      const ampm = parseInt(hour) >= 12 ? 'PM' : 'AM';
@@ -82,12 +82,12 @@ export function ManualAppointmentForm({ children }: { children: React.ReactNode 
      const displayTime = `${formattedHour.toString().padStart(2, '0')}:${minute} ${ampm}`;
 
 
-    const newAppointment: Appointment = {
+    const newAppointment: Omit<Appointment, 'id'> = {
       ...data,
       time: displayTime,
     };
 
-    setAppointments((prev) => [...prev, newAppointment]);
+    await addAppointment(newAppointment);
 
     toast({
       title: 'Cita Agendada',
@@ -212,7 +212,7 @@ export function ManualAppointmentForm({ children }: { children: React.ReactNode 
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Seleccione un estado" />
-                      </SelectTrigger>
+                      </Trigger>
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="Confirmada">Confirmada</SelectItem>

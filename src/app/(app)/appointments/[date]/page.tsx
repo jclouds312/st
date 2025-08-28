@@ -18,8 +18,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { appointmentsAtom, Appointment } from '@/lib/state';
-import { useAtom } from 'jotai';
+import { Appointment, addAppointmentAtom } from '@/lib/state';
+import { useSetAtom } from 'jotai';
 
 const availableTimes = [
   '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
@@ -31,7 +31,7 @@ export default function BookAppointmentPage() {
   const params = useParams();
   const { date } = params;
   const { toast } = useToast();
-  const [, setAppointments] = useAtom(appointmentsAtom);
+  const addAppointment = useSetAtom(addAppointmentAtom);
 
 
   const selectedDate = parse(date as string, 'yyyy-MM-dd', new Date());
@@ -45,7 +45,7 @@ export default function BookAppointmentPage() {
     setSelectedTime(time);
   };
 
-  const handleConfirmBooking = (e: React.FormEvent) => {
+  const handleConfirmBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!patientName || !patientEmail) {
        toast({
@@ -56,7 +56,7 @@ export default function BookAppointmentPage() {
       return;
     }
 
-    const newAppointment: Appointment = {
+    const newAppointment: Omit<Appointment, 'id'> = {
         name: patientName,
         time: selectedTime!,
         type: 'Consulta',
@@ -64,8 +64,7 @@ export default function BookAppointmentPage() {
         status: 'Confirmada'
     }
 
-    // Lógica para guardar la cita (simulada con Jotai)
-    setAppointments((prev) => [...prev, newAppointment]);
+    await addAppointment(newAppointment);
     
     setIsConfirmed(true);
      toast({

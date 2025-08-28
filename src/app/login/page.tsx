@@ -29,7 +29,7 @@ import Link from 'next/link';
 import { MediFlowLogo } from '@/components/icons';
 
 const formSchema = z.object({
-  username: z.string().min(1, 'El nombre de usuario es requerido.'),
+  email: z.string().email('El correo electrónico no es válido.'),
   password: z.string().min(1, 'La contraseña es requerida.'),
 });
 
@@ -42,7 +42,7 @@ export default function LoginPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
     },
   });
@@ -50,7 +50,7 @@ export default function LoginPage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const success = await login(values.username, values.password);
+      const success = await login(values.email, values.password);
       if (success) {
         toast({
           title: 'Inicio de Sesión Exitoso',
@@ -61,7 +61,7 @@ export default function LoginPage() {
         toast({
           variant: 'destructive',
           title: 'Error de Inicio de Sesión',
-          description: 'Nombre de usuario o contraseña incorrectos.',
+          description: 'Correo electrónico o contraseña incorrectos.',
         });
       }
     } catch (error) {
@@ -93,12 +93,12 @@ export default function LoginPage() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
-                name="username"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nombre de Usuario</FormLabel>
+                    <FormLabel>Correo Electrónico</FormLabel>
                     <FormControl>
-                      <Input placeholder="tu-usuario" {...field} />
+                      <Input placeholder="tu@email.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
