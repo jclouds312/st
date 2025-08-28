@@ -61,15 +61,15 @@ export default function AppointmentsPage() {
             <CardHeader>
                 <CardTitle>Agendar Nueva Cita</CardTitle>
                 <CardDescription>
-                    Selecciona un día en el calendario o agenda una cita manualmente.
+                   Agenda tu día. Selecciona una fecha disponible en el calendario.
                 </CardDescription>
             </CardHeader>
-            <CardContent className="p-2">
+            <CardContent className="p-2 flex justify-center">
               <Calendar
                 mode="single"
                 selected={selectedDate}
                 onSelect={handleDateSelect}
-                className="w-full"
+                className="w-full max-w-lg"
                 locale={es}
                 components={{ DayContent: DayContent as any }}
                 modifiers={{

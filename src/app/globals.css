@@ -85,4 +85,26 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Custom Calendar Styles */
+  .rdp {
+      --rdp-cell-size: 3rem; /* Increase cell size */
+    }
+  .rdp-head_cell {
+      font-size: 0.9rem; /* Increase weekday name size */
+      font-weight: 500;
+    }
+  .rdp-day {
+      font-size: 1rem; /* Increase day number size */
+    }
+  .rdp-day_today:not(.rdp-day_outside) {
+      font-weight: 700;
+      @apply bg-accent text-accent-foreground;
+    }
+  .rdp-day_selected, .rdp-day_selected:hover {
+      @apply bg-primary text-primary-foreground;
+    }
+  .rdp-day_disabled {
+       @apply text-muted-foreground/50;
+    }
 }
