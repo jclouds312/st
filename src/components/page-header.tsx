@@ -14,12 +14,17 @@ import { AppNav } from './app-nav';
 import { MediFlowLogo } from './icons';
 import Link from 'next/link';
 import { SidebarTrigger } from './ui/sidebar';
+import { cn } from '@/lib/utils';
 
 export function PageHeader() {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <div className="md:hidden">
-        <SidebarTrigger size="icon" variant="outline">
+        <SidebarTrigger
+          size="icon"
+          variant="ghost"
+          className="text-primary hover:text-primary"
+        >
           <Menu className="h-5 w-5" />
           <span className="sr-only">Alternar Menú</span>
         </SidebarTrigger>
