@@ -37,8 +37,8 @@ export function AppNav() {
       <div className="flex h-full flex-col">
         <SidebarHeader className="border-b">
           <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
-            <MediFlowLogo className="h-6 w-6 text-primary" />
-            <span className="text-lg font-headline">MediFlow</span>
+            <MediFlowLogo className="h-8 w-8 text-primary" />
+            <span className="text-xl font-semibold">MediFlow</span>
           </Link>
         </SidebarHeader>
         <SidebarContent className="flex-1">
@@ -48,7 +48,7 @@ export function AppNav() {
                 <Link href={link.href}>
                   <SidebarMenuButton
                     className="w-full justify-start"
-                    isActive={pathname === link.href}
+                    isActive={pathname.startsWith(link.href)}
                     tooltip={link.label}
                   >
                     <link.icon className="mr-2 h-4 w-4" />

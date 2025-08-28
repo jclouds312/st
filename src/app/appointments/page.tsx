@@ -99,8 +99,8 @@ export default function AppointmentsPage() {
                     disabled: (date) => date < new Date() || isSunday(date) || holidays.some(h => format(h, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'))
                 }}
                  modifiersClassNames={{
-                    sunday: 'text-red-500 font-bold',
-                    holiday: 'text-blue-500 font-bold bg-blue-50',
+                    sunday: 'text-red-500 bg-red-500/10 font-bold',
+                    holiday: 'text-blue-500 bg-blue-500/10 font-bold',
                 }}
               />
             </CardContent>

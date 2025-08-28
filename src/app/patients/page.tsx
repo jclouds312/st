@@ -100,8 +100,8 @@ export default function PatientsPage() {
                 </TableCell>
                 <TableCell>
                   <Badge
-                    variant={patient.status === 'Activo' ? 'secondary' : 'outline'}
-                     className={patient.status === 'Activo' ? 'bg-green-100 text-green-800' : ''}
+                    variant={patient.status === 'Activo' ? 'default' : 'secondary'}
+                     className={patient.status === 'Activo' ? 'bg-green-600/20 text-green-700 border-green-600/20' : ''}
                   >
                     {patient.status}
                   </Badge>

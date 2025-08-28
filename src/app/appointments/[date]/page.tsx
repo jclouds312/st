@@ -68,32 +68,32 @@ export default function BookAppointmentPage() {
   if (isConfirmed) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center max-w-md mx-auto">
-        <Card className="w-full">
+        <Card className="w-full shadow-lg">
             <CardHeader>
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                    <CheckCircle className="h-6 w-6 text-green-600" />
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+                    <CheckCircle className="h-10 w-10 text-green-600" />
                 </div>
-                <CardTitle className='pt-4'>¡Cita Confirmada!</CardTitle>
+                <CardTitle className='pt-4 text-2xl'>¡Cita Confirmada!</CardTitle>
                 <CardDescription>
                     Hemos agendado tu cita con éxito.
                 </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-2">
-                <p className='text-sm'>
+            <CardContent className="space-y-3">
+                <p className='text-md'>
                     <span className="font-semibold">Paciente:</span> {patientName}
                 </p>
-                 <p className='text-sm'>
+                 <p className='text-md'>
                     <span className="font-semibold">Fecha:</span> {format(selectedDate, 'PPP', { locale: es })}
                 </p>
-                 <p className='text-sm'>
+                 <p className='text-md'>
                     <span className="font-semibold">Hora:</span> {selectedTime}
                 </p>
-                <p className="text-muted-foreground pt-4 text-xs">
+                <p className="text-muted-foreground pt-4 text-sm">
                     Recibirás una confirmación por correo electrónico en breve.
                 </p>
             </CardContent>
         </Card>
-         <Button onClick={() => router.push('/appointments')} className="mt-6 w-full">
+         <Button onClick={() => router.push('/appointments')} className="mt-8 w-full text-lg py-6">
           Agendar otra cita
         </Button>
       </div>
@@ -102,7 +102,7 @@ export default function BookAppointmentPage() {
 
   return (
     <div className="mx-auto max-w-4xl">
-        <Button variant="ghost" onClick={() => router.back()} className="mb-4">
+        <Button variant="ghost" onClick={() => router.back()} className="mb-4 text-muted-foreground hover:text-foreground">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Volver
         </Button>
@@ -124,6 +124,7 @@ export default function BookAppointmentPage() {
                   key={time}
                   variant={selectedTime === time ? 'default' : 'outline'}
                   onClick={() => handleTimeSelect(time)}
+                  className="py-6 text-base"
                 >
                   {time}
                 </Button>
@@ -133,7 +134,7 @@ export default function BookAppointmentPage() {
         </div>
         <div>
             {selectedTime && (
-                <Card>
+                <Card className="sticky top-20">
                     <CardHeader>
                         <CardTitle>Confirma tu Cita</CardTitle>
                         <CardDescription>
@@ -156,7 +157,7 @@ export default function BookAppointmentPage() {
                                 <Label htmlFor="email">Correo Electrónico</Label>
                                 <Input id="email" type="email" value={patientEmail} onChange={e => setPatientEmail(e.target.value)} placeholder="tu@email.com" />
                             </div>
-                            <Button type="submit" className="w-full">
+                            <Button type="submit" className="w-full py-6 text-lg">
                                 Confirmar Cita
                             </Button>
                         </form>
