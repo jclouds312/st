@@ -1,3 +1,4 @@
+
 import { PaymentQR } from '@/components/payments/payment-qr';
 
 export default function PaymentsPage() {

@@ -1,4 +1,7 @@
-import { CircleUser, Menu, Search } from 'lucide-react';
+
+'use client';
+
+import { CircleUser, Menu, Search, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -9,14 +12,23 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { AppNav } from './app-nav';
-import { MediFlowLogo } from './icons';
-import Link from 'next/link';
 import { SidebarTrigger } from './ui/sidebar';
-import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation';
+
 
 export function PageHeader() {
+  const { user, logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  const handleSettings = () => {
+    router.push('/settings');
+  }
+
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <div className="md:hidden">
@@ -46,12 +58,15 @@ export function PageHeader() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+          <DropdownMenuLabel>{user?.username || 'Mi Cuenta'}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Configuración</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleSettings}>Configuración</DropdownMenuItem>
           <DropdownMenuItem>Soporte</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Cerrar Sesión</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleLogout}>
+             <LogOut className="mr-2 h-4 w-4" />
+            Cerrar Sesión
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
