@@ -205,7 +205,7 @@ export function ManualAppointmentForm({ children }: { children: React.ReactNode 
             <FormField
               control={form.control}
               name="status"
-              render={({ field })_ => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Estado</FormLabel>
                    <Select onValueChange={field.onChange} defaultValue={field.value}>
