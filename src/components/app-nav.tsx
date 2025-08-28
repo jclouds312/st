@@ -4,9 +4,9 @@ import {
   CalendarDays,
   CreditCard,
   LayoutDashboard,
+  MessageSquare,
   Settings,
   Users,
-  Webhook,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -25,6 +25,7 @@ const links = [
   { href: '/dashboard', label: 'Panel de Control', icon: LayoutDashboard },
   { href: '/appointments', label: 'Citas', icon: CalendarDays },
   { href: '/patients', label: 'Pacientes', icon: Users },
+  { href: '/whatsapp', label: 'WhatsApp', icon: MessageSquare },
   { href: '/courses', label: 'Capacitación', icon: BookText },
   { href: '/payments', label: 'Pagos', icon: CreditCard },
 ];
@@ -44,7 +45,7 @@ export function AppNav() {
           <SidebarMenu>
             {links.map((link) => (
               <SidebarMenuItem key={link.href}>
-                <Link href={link.href} passHref>
+                <Link href={link.href} passHref legacyBehavior>
                   <SidebarMenuButton
                     asChild
                     className="w-full justify-start"
@@ -64,7 +65,7 @@ export function AppNav() {
         <SidebarFooter className="border-t">
            <SidebarMenu>
              <SidebarMenuItem>
-                <Link href="/settings" passHref>
+                <Link href="/settings" passHref legacyBehavior>
                   <SidebarMenuButton
                     asChild
                     className="w-full justify-start"

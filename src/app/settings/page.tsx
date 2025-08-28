@@ -24,7 +24,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
-import { Webhook } from 'lucide-react';
+import { Webhook, Bot } from 'lucide-react';
+import { WhatsAppIcon } from '@/components/whatsapp-icon';
 
 const teamMembers = [
     { name: "Dr. Evelyn Reed", email: "evelyn.reed@mediflow.com", role: "Médico" },
@@ -45,6 +46,7 @@ export default function SettingsPage() {
         <TabsList>
           <TabsTrigger value="profile">Perfil</TabsTrigger>
           <TabsTrigger value="team">Gestionar Equipo</TabsTrigger>
+          <TabsTrigger value="whatsapp">WhatsApp</TabsTrigger>
           <TabsTrigger value="courses">Gestión de Cursos</TabsTrigger>
           <TabsTrigger value="integrations">Integraciones</TabsTrigger>
         </TabsList>
@@ -106,6 +108,36 @@ export default function SettingsPage() {
             <CardFooter className="justify-between">
                 <Input placeholder="Correo del nuevo miembro" className="max-w-xs" />
                 <Button>Invitar Miembro</Button>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+         <TabsContent value="whatsapp">
+          <Card>
+            <CardHeader>
+              <CardTitle>Integración con WhatsApp</CardTitle>
+              <CardDescription>
+                Conecta tu número de WhatsApp para gestionar conversaciones.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="whatsapp-number">Número de WhatsApp</Label>
+                <Input id="whatsapp-number" placeholder="+1 (555) 123-4567" />
+              </div>
+               <div className="space-y-2">
+                <Label htmlFor="welcome-message">Mensaje de Bienvenida Automático</Label>
+                <Textarea id="welcome-message" placeholder="Hola, gracias por contactar a nuestra clínica. ¿Cómo podemos ayudarte?" />
+              </div>
+            </CardContent>
+            <CardFooter className="justify-between">
+              <Button>
+                <WhatsAppIcon className="mr-2 h-4 w-4" />
+                Conectar WhatsApp
+              </Button>
+               <Button variant="secondary">
+                <Bot className="mr-2 h-4 w-4" />
+                Configurar Chatbot
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>
