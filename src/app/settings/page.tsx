@@ -24,10 +24,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
+import { Webhook } from 'lucide-react';
 
 const teamMembers = [
-    { name: "Dr. Evelyn Reed", email: "evelyn.reed@mediflow.com", role: "Physician" },
-    { name: "Leo Carter", email: "leo.carter@mediflow.com", role: "Nurse" },
+    { name: "Dr. Evelyn Reed", email: "evelyn.reed@mediflow.com", role: "Médico" },
+    { name: "Leo Carter", email: "leo.carter@mediflow.com", role: "Enfermero/a" },
     { name: "Mia Evans", email: "mia.evans@mediflow.com", role: "Admin" },
 ]
 
@@ -35,56 +36,57 @@ export default function SettingsPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Configuración</h1>
         <p className="text-muted-foreground">
-          Manage your account, team, and application settings.
+          Gestiona tu cuenta, equipo y configuración de la aplicación.
         </p>
       </div>
       <Tabs defaultValue="profile" className="w-full">
         <TabsList>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="team">Manage Team</TabsTrigger>
-          <TabsTrigger value="courses">Course Management</TabsTrigger>
+          <TabsTrigger value="profile">Perfil</TabsTrigger>
+          <TabsTrigger value="team">Gestionar Equipo</TabsTrigger>
+          <TabsTrigger value="courses">Gestión de Cursos</TabsTrigger>
+          <TabsTrigger value="integrations">Integraciones</TabsTrigger>
         </TabsList>
         <TabsContent value="profile">
           <Card>
             <CardHeader>
-              <CardTitle>Profile</CardTitle>
+              <CardTitle>Perfil</CardTitle>
               <CardDescription>
-                Update your personal information.
+                Actualiza tu información personal.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">Nombre</Label>
                 <Input id="name" defaultValue="Dr. Alex Chen" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Correo Electrónico</Label>
                 <Input id="email" type="email" defaultValue="alex.chen@mediflow.com" />
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Save Changes</Button>
+              <Button>Guardar Cambios</Button>
             </CardFooter>
           </Card>
         </TabsContent>
         <TabsContent value="team">
           <Card>
             <CardHeader>
-              <CardTitle>Team Members</CardTitle>
+              <CardTitle>Miembros del Equipo</CardTitle>
               <CardDescription>
-                Invite and manage your team members.
+                Invita y gestiona a los miembros de tu equipo.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>Nombre</TableHead>
+                    <TableHead>Correo Electrónico</TableHead>
+                    <TableHead>Rol</TableHead>
+                    <TableHead className="text-right">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -94,7 +96,7 @@ export default function SettingsPage() {
                             <TableCell>{member.email}</TableCell>
                             <TableCell>{member.role}</TableCell>
                             <TableCell className="text-right">
-                                <Button variant="outline" size="sm">Remove</Button>
+                                <Button variant="outline" size="sm">Eliminar</Button>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -102,37 +104,63 @@ export default function SettingsPage() {
               </Table>
             </CardContent>
             <CardFooter className="justify-between">
-                <Input placeholder="New member email" className="max-w-xs" />
-                <Button>Invite Member</Button>
+                <Input placeholder="Correo del nuevo miembro" className="max-w-xs" />
+                <Button>Invitar Miembro</Button>
             </CardFooter>
           </Card>
         </TabsContent>
         <TabsContent value="courses">
           <Card>
             <CardHeader>
-              <CardTitle>Course Management</CardTitle>
+              <CardTitle>Gestión de Cursos</CardTitle>
               <CardDescription>
-                Upload new online classes and training materials.
+                Sube nuevas clases online y materiales de capacitación.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="course-title">Course Title</Label>
-                <Input id="course-title" placeholder="e.g., Advanced Suturing Techniques" />
+                <Label htmlFor="course-title">Título del Curso</Label>
+                <Input id="course-title" placeholder="Ej., Técnicas Avanzadas de Sutura" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="course-desc">Description</Label>
-                <Textarea id="course-desc" placeholder="A brief summary of the course content." />
+                <Label htmlFor="course-desc">Descripción</Label>
+                <Textarea id="course-desc" placeholder="Un breve resumen del contenido del curso." />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="course-video">Video File or URL</Label>
-                <Input id="course-video" type="text" placeholder="https://example.com/video.mp4 or" />
+                <Label htmlFor="course-video">Archivo de Video o URL</Label>
+                <Input id="course-video" type="text" placeholder="https://ejemplo.com/video.mp4 o" />
                  <Input id="picture" type="file" />
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Upload Course</Button>
+              <Button>Subir Curso</Button>
             </CardFooter>
+          </Card>
+        </TabsContent>
+        <TabsContent value="integrations">
+          <Card>
+            <CardHeader>
+              <CardTitle>Integraciones</CardTitle>
+              <CardDescription>
+                Conecta MediFlow con otras aplicaciones para automatizar flujos de trabajo.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+               <Card>
+                <CardHeader className="flex flex-row items-center justify-between pb-4">
+                    <div className='flex items-center gap-2'>
+                        <Webhook className="h-6 w-6" />
+                        <CardTitle className="text-xl">n8n</CardTitle>
+                    </div>
+                    <Button>Conectar</Button>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">
+                        Automatiza tus flujos de trabajo conectando MediFlow con cientos de otras aplicaciones a través de n8n.
+                    </p>
+                </CardContent>
+               </Card>
+            </CardContent>
           </Card>
         </TabsContent>
       </Tabs>

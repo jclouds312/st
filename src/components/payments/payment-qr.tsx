@@ -27,8 +27,8 @@ import { useToast } from '@/hooks/use-toast';
 import { CheckCircle, QrCode } from 'lucide-react';
 
 const formSchema = z.object({
-  patientName: z.string().min(2, 'Patient name is required.'),
-  amount: z.coerce.number().min(0.01, 'Amount must be greater than 0.'),
+  patientName: z.string().min(2, 'El nombre del paciente es requerido.'),
+  amount: z.coerce.number().min(0.01, 'El monto debe ser mayor que 0.'),
 });
 
 type PaymentDetails = z.infer<typeof formSchema>;
@@ -53,10 +53,10 @@ export function PaymentQR() {
 
   function handleVerifyPayment() {
     toast({
-      title: 'Payment Verified',
-      description: `Payment of $${paymentDetails?.amount.toFixed(
+      title: 'Pago Verificado',
+      description: `El pago de $${paymentDetails?.amount.toFixed(
         2
-      )} for ${paymentDetails?.patientName} has been confirmed.`,
+      )} para ${paymentDetails?.patientName} ha sido confirmado.`,
     });
     setPaymentDetails(null);
     form.reset();
@@ -66,24 +66,24 @@ export function PaymentQR() {
     return (
       <Card className="w-full text-center">
         <CardHeader>
-          <CardTitle>Payment Request</CardTitle>
+          <CardTitle>Solicitud de Pago</CardTitle>
           <CardDescription>
-            Scan the QR code to complete the payment.
+            Escanee el código QR para completar el pago.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center gap-4">
           <Image
-            src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=payment-for-${paymentDetails.patientName.replace(
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=pago-para-${paymentDetails.patientName.replace(
               ' ',
               '-'
-            )}-amount-${paymentDetails.amount}`}
-            alt="Payment QR Code"
+            )}-monto-${paymentDetails.amount}`}
+            alt="Código QR de Pago"
             width={200}
             height={200}
             className="rounded-lg"
           />
           <div className="text-lg">
-            Patient: <span className="font-semibold">{paymentDetails.patientName}</span>
+            Paciente: <span className="font-semibold">{paymentDetails.patientName}</span>
           </div>
           <div className="text-3xl font-bold">
             ${paymentDetails.amount.toFixed(2)}
@@ -92,14 +92,14 @@ export function PaymentQR() {
         <CardFooter className="flex-col gap-2">
           <Button onClick={handleVerifyPayment} className="w-full">
             <CheckCircle className="mr-2 h-4 w-4" />
-            Verify Payment
+            Verificar Pago
           </Button>
           <Button
             variant="outline"
             onClick={() => setPaymentDetails(null)}
             className="w-full"
           >
-            Cancel
+            Cancelar
           </Button>
         </CardFooter>
       </Card>
@@ -109,9 +109,9 @@ export function PaymentQR() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>QR Code Payment System</CardTitle>
+        <CardTitle>Sistema de Pago con Código QR</CardTitle>
         <CardDescription>
-          Generate a QR code to collect payment from a patient.
+          Genere un código QR para cobrar el pago de un paciente.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -122,9 +122,9 @@ export function PaymentQR() {
               name="patientName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Patient Name</FormLabel>
+                  <FormLabel>Nombre del Paciente</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., John Doe" {...field} />
+                    <Input placeholder="Ej., Juan Pérez" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -135,7 +135,7 @@ export function PaymentQR() {
               name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Amount</FormLabel>
+                  <FormLabel>Monto</FormLabel>
                   <FormControl>
                     <Input type="number" step="0.01" {...field} />
                   </FormControl>
@@ -145,7 +145,7 @@ export function PaymentQR() {
             />
              <Button type="submit" className="w-full">
                 <QrCode className="mr-2 h-4 w-4" />
-                Generate QR Code
+                Generar Código QR
             </Button>
           </form>
         </Form>

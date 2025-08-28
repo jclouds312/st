@@ -15,22 +15,22 @@ const upcomingAppointments = [
     {
         name: "Liam Johnson",
         time: "10:00 AM",
-        type: "Consultation"
+        type: "Consulta"
     },
     {
         name: "Noah Williams",
         time: "11:30 AM",
-        type: "Check-up"
+        type: "Revisión"
     },
     {
         name: "Emma Brown",
         time: "2:00 PM",
-        type: "Follow-up"
+        type: "Seguimiento"
     },
      {
         name: "James Jones",
         time: "3:30 PM",
-        type: "Consultation"
+        type: "Consulta"
     }
 ]
 
@@ -40,34 +40,34 @@ export default function AppointmentsPage() {
       <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
         <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
           <CardHeader className="pb-3">
-            <CardTitle>Appointments</CardTitle>
+            <CardTitle>Citas</CardTitle>
             <CardDescription className="max-w-lg text-balance leading-relaxed">
-              Manage and view your patient appointments.
+              Gestiona y visualiza las citas de tus pacientes.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button>Create New Appointment</Button>
+            <Button>Crear Nueva Cita</Button>
           </CardContent>
         </Card>
         <Card x-chunk="dashboard-05-chunk-1">
           <CardHeader className="pb-2">
-            <CardDescription>This Week</CardDescription>
+            <CardDescription>Esta Semana</CardDescription>
             <CardTitle className="text-4xl">25</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-muted-foreground">
-              +10% from last week
+              +10% desde la semana pasada
             </div>
           </CardContent>
         </Card>
         <Card x-chunk="dashboard-05-chunk-2">
           <CardHeader className="pb-2">
-            <CardDescription>This Month</CardDescription>
+            <CardDescription>Este Mes</CardDescription>
             <CardTitle className="text-4xl">120</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-muted-foreground">
-              +5% from last month
+              +5% desde el mes pasado
             </div>
           </CardContent>
         </Card>
@@ -114,9 +114,9 @@ export default function AppointmentsPage() {
         <div>
           <Card>
             <CardHeader>
-              <CardTitle>Upcoming</CardTitle>
+              <CardTitle>Próximas</CardTitle>
               <CardDescription>
-                Your next appointments for today.
+                Tus próximas citas para hoy.
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
@@ -137,7 +137,7 @@ export default function AppointmentsPage() {
             <CardContent>
               <Button size="sm" className="w-full flex items-center gap-2">
                 <WhatsAppIcon className="h-4 w-4" />
-                Schedule via WhatsApp
+                Agendar por WhatsApp
               </Button>
             </CardContent>
           </Card>

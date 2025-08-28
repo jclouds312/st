@@ -10,66 +10,67 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 
-const courses = [
+const medicalCourses = [
   {
-    title: 'Understanding Your Diagnosis',
+    title: 'Entendiendo su Diagnóstico',
     description:
-      'Learn more about your condition, treatment options, and what to expect.',
+      'Aprenda más sobre su condición, opciones de tratamiento y qué esperar.',
     imageUrl: 'https://picsum.photos/600/400?random=1',
-    imageHint: 'medical chart',
+    imageHint: 'gráfico médico',
     link: '#',
   },
   {
-    title: 'Nutrition for a Healthy Life',
+    title: 'Nutrición para una Vida Saludable',
     description:
-      'Discover the best dietary choices to support your health and recovery.',
+      'Descubra las mejores opciones dietéticas para apoyar su salud y recuperación.',
       imageUrl: 'https://picsum.photos/600/400?random=2',
-      imageHint: 'healthy food',
+      imageHint: 'comida saludable',
     link: '#',
   },
   {
-    title: 'Post-Operative Care Guide',
-    description: 'A step-by-step guide to ensure a smooth recovery after surgery.',
+    title: 'Guía de Cuidados Postoperatorios',
+    description: 'Una guía paso a paso para asegurar una recuperación sin problemas después de la cirugía.',
     imageUrl: 'https://picsum.photos/600/400?random=3',
-    imageHint: 'patient recovery',
-    link: '#',
-  },
-  {
-    title: 'Managing Chronic Pain',
-    description:
-      'Techniques and strategies for living comfortably with chronic pain.',
-      imageUrl: 'https://picsum.photos/600/400?random=4',
-      imageHint: 'yoga meditation',
-    link: '#',
-  },
-  {
-    title: 'Physical Therapy Exercises',
-    description: 'A library of exercises to help you regain strength and mobility.',
-    imageUrl: 'https://picsum.photos/600/400?random=5',
-    imageHint: 'physical therapy',
-    link: '#',
-  },
-  {
-    title: 'Mental Wellness and You',
-    description:
-      'Resources to support your mental health throughout your treatment journey.',
-      imageUrl: 'https://picsum.photos/600/400?random=6',
-      imageHint: 'calm serene',
+    imageHint: 'recuperación del paciente',
     link: '#',
   },
 ];
 
+const systemCourses = [
+    {
+      title: 'Capacitación del Sistema para Médicos',
+      description: 'Aprenda a utilizar todas las funciones de MediFlow para optimizar la atención al paciente.',
+      imageUrl: 'https://picsum.photos/600/400?random=4',
+      imageHint: 'doctor computadora',
+      link: '#',
+    },
+    {
+      title: 'Guía para Administradores',
+      description: 'Gestione equipos, configuraciones y supervise el rendimiento de la plataforma.',
+      imageUrl: 'https://picsum.photos/600/400?random=5',
+      imageHint: 'panel de control',
+      link: '#',
+    },
+    {
+      title: 'Integración con n8n',
+      description: 'Aprenda a conectar MediFlow con otras aplicaciones utilizando n8n para automatizar flujos de trabajo.',
+      imageUrl: 'https://picsum.photos/600/400?random=6',
+      imageHint: 'automatización de flujo de trabajo',
+      link: '#',
+    },
+]
+
 export default function CoursesPage() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Patient Courses</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Capacitación para Pacientes</h1>
         <p className="text-muted-foreground">
-          Access educational materials and resources for your health journey.
+          Acceda a materiales educativos y recursos para su viaje de salud.
         </p>
       </div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {courses.map((course) => (
+        {medicalCourses.map((course) => (
           <Card key={course.title} className="flex flex-col">
             <CardHeader className="p-0">
               <Image
@@ -87,7 +88,38 @@ export default function CoursesPage() {
             </div>
             <CardFooter>
               <Button asChild className="w-full">
-                <Link href={course.link}>Start Course</Link>
+                <Link href={course.link}>Iniciar Curso</Link>
+              </Button>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+       <div>
+        <h1 className="text-2xl font-bold tracking-tight">Capacitación del Sistema</h1>
+        <p className="text-muted-foreground">
+          Recursos para que los médicos y administradores dominen el sistema.
+        </p>
+      </div>
+       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {systemCourses.map((course) => (
+          <Card key={course.title} className="flex flex-col">
+            <CardHeader className="p-0">
+              <Image
+                src={course.imageUrl}
+                alt={course.title}
+                width={600}
+                height={400}
+                data-ai-hint={course.imageHint}
+                className="aspect-video w-full rounded-t-lg object-cover"
+              />
+            </CardHeader>
+            <div className="flex flex-1 flex-col p-6">
+                <CardTitle className="mb-2">{course.title}</CardTitle>
+                <CardDescription className="flex-1">{course.description}</CardDescription>
+            </div>
+            <CardFooter>
+              <Button asChild className="w-full">
+                <Link href={course.link}>Iniciar Capacitación</Link>
               </Button>
             </CardFooter>
           </Card>

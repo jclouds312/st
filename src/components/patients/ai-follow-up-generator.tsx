@@ -34,8 +34,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { WhatsAppIcon } from '../whatsapp-icon';
 
 const formSchema = z.object({
-  patientName: z.string().min(2, 'Patient name is required.'),
-  appointmentNotes: z.string().min(10, 'Appointment notes are required.'),
+  patientName: z.string().min(2, 'El nombre del paciente es requerido.'),
+  appointmentNotes: z.string().min(10, 'Las notas de la cita son requeridas.'),
   patientHistory: z.string().optional(),
 });
 
@@ -69,15 +69,15 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
       );
       setGeneratedMessage(result.followUpMessage);
       toast({
-        title: 'Message Generated',
-        description: 'AI-powered follow-up message created successfully.',
+        title: 'Mensaje Generado',
+        description: 'Mensaje de seguimiento creado con IA exitosamente.',
       });
     } catch (error) {
       console.error(error);
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to generate AI follow-up message.',
+        description: 'No se pudo generar el mensaje de seguimiento con IA.',
       });
     } finally {
       setIsLoading(false);
@@ -87,8 +87,8 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
   function handleCopyToClipboard() {
     navigator.clipboard.writeText(generatedMessage);
     toast({
-      title: 'Copied to Clipboard',
-      description: 'Message ready to be pasted.',
+      title: 'Copiado al Portapapeles',
+      description: 'Mensaje listo para ser pegado.',
     });
   }
 
@@ -97,14 +97,14 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Bot className="mr-2 h-4 w-4" />
-          AI Follow-up
+          Seguimiento con IA
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>AI-Powered Follow-up Message</DialogTitle>
+          <DialogTitle>Mensaje de Seguimiento con IA</DialogTitle>
           <DialogDescription>
-            Generate a personalized follow-up message for {patient.name}.
+            Generar un mensaje de seguimiento personalizado para {patient.name}.
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -115,7 +115,7 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
                 name="patientName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Patient Name</FormLabel>
+                    <FormLabel>Nombre del Paciente</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -128,7 +128,7 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
                 name="appointmentNotes"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Appointment Notes</FormLabel>
+                    <FormLabel>Notas de la Cita</FormLabel>
                     <FormControl>
                       <Textarea {...field} rows={6} />
                     </FormControl>
@@ -141,7 +141,7 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
                 name="patientHistory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Patient History (Optional)</FormLabel>
+                    <FormLabel>Historial del Paciente (Opcional)</FormLabel>
                     <FormControl>
                       <Textarea {...field} rows={4} />
                     </FormControl>
@@ -153,12 +153,12 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating...
+                    Generando...
                   </>
                 ) : (
                   <>
                     <Bot className="mr-2 h-4 w-4" />
-                    Generate Message
+                    Generar Mensaje
                   </>
                 )}
               </Button>
@@ -167,7 +167,7 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
           <div className="flex flex-col space-y-4">
             <Card className="flex-1">
               <CardHeader>
-                <CardTitle className="text-base">Generated Message</CardTitle>
+                <CardTitle className="text-base">Mensaje Generado</CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
                 {isLoading && (
@@ -176,7 +176,7 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
                    </div>
                 )}
                 {!isLoading && !generatedMessage && (
-                  <p>Your AI-generated message will appear here.</p>
+                  <p>Su mensaje generado por IA aparecerá aquí.</p>
                 )}
                 {generatedMessage && (
                   <p className="whitespace-pre-wrap">{generatedMessage}</p>
@@ -191,11 +191,11 @@ export function AiFollowUpGenerator({ patient }: { patient: Patient }) {
                   className="w-full"
                 >
                   <Clipboard className="mr-2 h-4 w-4" />
-                  Copy
+                  Copiar
                 </Button>
                 <Button className="w-full">
                   <WhatsAppIcon className="mr-2 h-4 w-4" />
-                  Send via WhatsApp
+                  Enviar por WhatsApp
                 </Button>
               </div>
             )}

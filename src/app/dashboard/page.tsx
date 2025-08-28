@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -23,6 +22,7 @@ import {
   DollarSign,
   BookOpen,
   ArrowUpRight,
+  Webhook,
 } from 'lucide-react';
 import {
   Bar,
@@ -36,10 +36,10 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 const chartData = [
-  { month: 'Jan', patients: 186 },
+  { month: 'Ene', patients: 186 },
   { month: 'Feb', patients: 305 },
   { month: 'Mar', patients: 237 },
-  { month: 'Apr', patients: 273 },
+  { month: 'Abr', patients: 273 },
   { month: 'May', patients: 209 },
   { month: 'Jun', patients: 214 },
 ];
@@ -48,88 +48,102 @@ const recentAppointments = [
   {
     patient: 'Olivia Martin',
     email: 'olivia.martin@email.com',
-    type: 'Check-up',
-    status: 'Completed',
+    type: 'Revisión',
+    status: 'Completado',
   },
   {
     patient: 'Jackson Lee',
     email: 'jackson.lee@email.com',
-    type: 'Follow-up',
-    status: 'Upcoming',
+    type: 'Seguimiento',
+    status: 'Próximo',
   },
   {
     patient: 'Isabella Nguyen',
     email: 'isabella.nguyen@email.com',
-    type: 'Consultation',
-    status: 'Completed',
+    type: 'Consulta',
+    status: 'Completado',
   },
   {
     patient: 'William Kim',
     email: 'will@email.com',
-    type: 'Check-up',
-    status: 'Upcoming',
+    type: 'Revisión',
+    status: 'Próximo',
   },
   {
     patient: 'Sofia Davis',
     email: 'sofia.davis@email.com',
-    type: 'Follow-up',
-    status: 'Canceled',
+    type: 'Seguimiento',
+    status: 'Cancelado',
   },
 ];
 
 export default function DashboardPage() {
   return (
     <div className="grid gap-4 md:gap-8">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Upcoming Appointments
+              Citas Próximas
             </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">12</div>
             <p className="text-xs text-muted-foreground">
-              +2 this week
+              +2 esta semana
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">New Patients</CardTitle>
+            <CardTitle className="text-sm font-medium">Nuevos Pacientes</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+25</div>
             <p className="text-xs text-muted-foreground">
-              +18.1% from last month
+              +18.1% desde el mes pasado
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Revenue Today</CardTitle>
+            <CardTitle className="text-sm font-medium">Ingresos de Hoy</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">$1,250.00</div>
             <p className="text-xs text-muted-foreground">
-              Based on 5 completed appointments
+              Basado en 5 citas completadas
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Courses In Progress
+              Cursos en Progreso
             </CardTitle>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+8</div>
             <p className="text-xs text-muted-foreground">
-              +5 since last month
+              +5 desde el mes pasado
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Integración n8n
+            </CardTitle>
+            <Webhook className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">Activa</div>
+            <p className="text-xs text-muted-foreground">
+              Sincronizando flujos de trabajo
             </p>
           </CardContent>
         </Card>
@@ -137,9 +151,9 @@ export default function DashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="lg:col-span-4">
           <CardHeader>
-            <CardTitle>Patient Volume</CardTitle>
+            <CardTitle>Volumen de Pacientes</CardTitle>
             <CardDescription>
-              Patient volume over the last 6 months.
+              Volumen de pacientes en los últimos 6 meses.
             </CardDescription>
           </CardHeader>
           <CardContent className="pl-2">
@@ -175,14 +189,14 @@ export default function DashboardPage() {
         <Card className="lg:col-span-3">
           <CardHeader className="flex flex-row items-center">
              <div className="grid gap-2">
-              <CardTitle>Recent Appointments</CardTitle>
+              <CardTitle>Citas Recientes</CardTitle>
               <CardDescription>
-                An overview of your most recent patient appointments.
+                Un resumen de sus citas de pacientes más recientes.
               </CardDescription>
             </div>
             <Button asChild size="sm" className="ml-auto gap-1">
               <Link href="/appointments">
-                View All
+                Ver Todas
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -191,9 +205,9 @@ export default function DashboardPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Patient</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>Paciente</TableHead>
+                  <TableHead>Tipo</TableHead>
+                  <TableHead>Estado</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -209,16 +223,16 @@ export default function DashboardPage() {
                     <TableCell>
                       <Badge
                         variant={
-                          appointment.status === 'Completed'
+                          appointment.status === 'Completado'
                             ? 'default'
-                            : appointment.status === 'Upcoming'
+                            : appointment.status === 'Próximo'
                             ? 'secondary'
                             : 'destructive'
                         }
                         className={
-                          appointment.status === 'Completed'
+                          appointment.status === 'Completado'
                           ? 'bg-green-100 text-green-800'
-                          : appointment.status === 'Upcoming'
+                          : appointment.status === 'Próximo'
                           ? 'bg-blue-100 text-blue-800'
                           : 'bg-red-100 text-red-800'
                         }

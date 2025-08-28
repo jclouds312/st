@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   Settings,
   Users,
+  Webhook,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -21,11 +22,11 @@ import {
 } from '@/components/ui/sidebar';
 
 const links = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/appointments', label: 'Appointments', icon: CalendarDays },
-  { href: '/patients', label: 'Patients', icon: Users },
-  { href: '/courses', label: 'Courses', icon: BookText },
-  { href: '/payments', label: 'Payments', icon: CreditCard },
+  { href: '/dashboard', label: 'Panel de Control', icon: LayoutDashboard },
+  { href: '/appointments', label: 'Citas', icon: CalendarDays },
+  { href: '/patients', label: 'Pacientes', icon: Users },
+  { href: '/courses', label: 'Capacitación', icon: BookText },
+  { href: '/payments', label: 'Pagos', icon: CreditCard },
 ];
 
 export function AppNav() {
@@ -43,17 +44,19 @@ export function AppNav() {
           <SidebarMenu>
             {links.map((link) => (
               <SidebarMenuItem key={link.href}>
-                <SidebarMenuButton
-                  asChild
-                  className="w-full justify-start"
-                  isActive={pathname === link.href}
-                  tooltip={link.label}
-                >
-                  <Link href={link.href}>
-                    <link.icon className="mr-2 h-4 w-4" />
-                    <span>{link.label}</span>
-                  </Link>
-                </SidebarMenuButton>
+                <Link href={link.href} passHref>
+                  <SidebarMenuButton
+                    asChild
+                    className="w-full justify-start"
+                    isActive={pathname === link.href}
+                    tooltip={link.label}
+                  >
+                    <div>
+                      <link.icon className="mr-2 h-4 w-4" />
+                      <span>{link.label}</span>
+                    </div>
+                  </SidebarMenuButton>
+                </Link>
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
@@ -61,17 +64,19 @@ export function AppNav() {
         <SidebarFooter className="border-t">
            <SidebarMenu>
              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  className="w-full justify-start"
-                  isActive={pathname === '/settings'}
-                  tooltip="Settings"
-                >
-                  <Link href="/settings">
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
-                  </Link>
-                </SidebarMenuButton>
+                <Link href="/settings" passHref>
+                  <SidebarMenuButton
+                    asChild
+                    className="w-full justify-start"
+                    isActive={pathname === '/settings'}
+                    tooltip="Configuración"
+                  >
+                    <div>
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Configuración</span>
+                    </div>
+                  </SidebarMenuButton>
+                </Link>
              </SidebarMenuItem>
            </SidebarMenu>
         </SidebarFooter>

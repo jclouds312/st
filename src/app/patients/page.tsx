@@ -22,41 +22,41 @@ const patients = [
     name: 'Olivia Martin',
     email: 'olivia.martin@email.com',
     lastVisit: '2023-11-20',
-    status: 'Active',
-    notes: 'Patient reported feeling much better after the last treatment. Prescribed two more weeks of medication.',
-    history: 'History of seasonal allergies.',
+    status: 'Activo',
+    notes: 'La paciente informó sentirse mucho mejor después del último tratamiento. Se recetaron dos semanas más de medicación.',
+    history: 'Historial de alergias estacionales.',
   },
   {
     name: 'Jackson Lee',
     email: 'jackson.lee@email.com',
     lastVisit: '2023-11-18',
-    status: 'Active',
-    notes: 'Routine check-up. All vitals are normal. Advised to continue with regular exercise.',
-    history: 'No significant medical history.',
+    status: 'Activo',
+    notes: 'Revisión de rutina. Todos los signos vitales son normales. Se recomendó continuar con el ejercicio regular.',
+    history: 'Sin historial médico significativo.',
   },
   {
     name: 'Isabella Nguyen',
     email: 'isabella.nguyen@email.com',
     lastVisit: '2023-10-05',
-    status: 'Inactive',
-    notes: 'Patient missed their last scheduled follow-up.',
-    history: 'Previously treated for a minor sports injury.',
+    status: 'Inactivo',
+    notes: 'La paciente no asistió a su última cita de seguimiento programada.',
+    history: 'Tratada previamente por una lesión deportiva menor.',
   },
   {
     name: 'William Kim',
     email: 'will@email.com',
     lastVisit: '2023-11-21',
-    status: 'Active',
-    notes: 'Discussed test results. Results are positive. No further action is needed at this time.',
+    status: 'Activo',
+    notes: 'Se discutieron los resultados de las pruebas. Los resultados son positivos. No se necesita ninguna otra acción en este momento.',
     history: 'N/A',
   },
   {
     name: 'Sofia Davis',
     email: 'sofia.davis@email.com',
     lastVisit: '2023-09-15',
-    status: 'Inactive',
-    notes: 'Completed full course of treatment.',
-    history: 'Treated for a respiratory infection.',
+    status: 'Inactivo',
+    notes: 'Completó el curso completo de tratamiento.',
+    history: 'Tratada por una infección respiratoria.',
   },
 ];
 
@@ -64,19 +64,19 @@ export default function PatientsPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Patients</CardTitle>
+        <CardTitle>Pacientes</CardTitle>
         <CardDescription>
-          Manage your patients and view their details.
+          Gestiona tus pacientes y visualiza sus detalles.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Patient</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Last Visit</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>Paciente</TableHead>
+              <TableHead>Estado</TableHead>
+              <TableHead>Última Visita</TableHead>
+              <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -100,8 +100,8 @@ export default function PatientsPage() {
                 </TableCell>
                 <TableCell>
                   <Badge
-                    variant={patient.status === 'Active' ? 'secondary' : 'outline'}
-                     className={patient.status === 'Active' ? 'bg-green-100 text-green-800' : ''}
+                    variant={patient.status === 'Activo' ? 'secondary' : 'outline'}
+                     className={patient.status === 'Activo' ? 'bg-green-100 text-green-800' : ''}
                   >
                     {patient.status}
                   </Badge>
