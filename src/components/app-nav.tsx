@@ -45,17 +45,14 @@ export function AppNav() {
           <SidebarMenu>
             {links.map((link) => (
               <SidebarMenuItem key={link.href}>
-                <Link href={link.href} passHref legacyBehavior>
+                <Link href={link.href}>
                   <SidebarMenuButton
-                    asChild
                     className="w-full justify-start"
                     isActive={pathname === link.href}
                     tooltip={link.label}
                   >
-                    <div>
-                      <link.icon className="mr-2 h-4 w-4" />
-                      <span>{link.label}</span>
-                    </div>
+                    <link.icon className="mr-2 h-4 w-4" />
+                    <span>{link.label}</span>
                   </SidebarMenuButton>
                 </Link>
               </SidebarMenuItem>
@@ -65,17 +62,14 @@ export function AppNav() {
         <SidebarFooter className="border-t">
            <SidebarMenu>
              <SidebarMenuItem>
-                <Link href="/settings" passHref legacyBehavior>
+                <Link href="/settings">
                   <SidebarMenuButton
-                    asChild
                     className="w-full justify-start"
                     isActive={pathname === '/settings'}
                     tooltip="Configuración"
                   >
-                    <div>
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Configuración</span>
-                    </div>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Configuración</span>
                   </SidebarMenuButton>
                 </Link>
              </SidebarMenuItem>
