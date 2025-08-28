@@ -26,9 +26,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import Link from 'next/link';
+import { format, parseISO } from 'date-fns';
 
 const patients = [
   {
+    id: 'olivia-martin',
     name: 'Olivia Martin',
     email: 'olivia.martin@email.com',
     lastVisit: '2023-11-20',
@@ -37,6 +40,7 @@ const patients = [
     history: 'Historial de alergias estacionales.',
   },
   {
+    id: 'jackson-lee',
     name: 'Jackson Lee',
     email: 'jackson.lee@email.com',
     lastVisit: '2023-11-18',
@@ -45,6 +49,7 @@ const patients = [
     history: 'Sin historial médico significativo.',
   },
   {
+    id: 'isabella-nguyen',
     name: 'Isabella Nguyen',
     email: 'isabella.nguyen@email.com',
     lastVisit: '2023-10-05',
@@ -53,6 +58,7 @@ const patients = [
     history: 'Tratada previamente por una lesión deportiva menor.',
   },
   {
+    id: 'william-kim',
     name: 'William Kim',
     email: 'will@email.com',
     lastVisit: '2023-11-21',
@@ -61,6 +67,7 @@ const patients = [
     history: 'N/A',
   },
   {
+    id: 'sofia-davis',
     name: 'Sofia Davis',
     email: 'sofia.davis@email.com',
     lastVisit: '2023-09-15',
@@ -116,7 +123,7 @@ export default function PatientsPage() {
                     {patient.status}
                   </Badge>
                 </TableCell>
-                <TableCell className="hidden md:table-cell">{patient.lastVisit}</TableCell>
+                <TableCell className="hidden md:table-cell">{format(parseISO(patient.lastVisit), 'PPP')}</TableCell>
                 <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">
                         <AiFollowUpGenerator patient={patient} />
@@ -129,7 +136,9 @@ export default function PatientsPage() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                            <DropdownMenuItem>Ver Perfil</DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href={`/patients/${patient.id}`}>Ver Perfil</Link>
+                            </DropdownMenuItem>
                             <DropdownMenuItem>Editar</DropdownMenuItem>
                             <DropdownMenuItem className="text-destructive">Eliminar</DropdownMenuItem>
                         </DropdownMenuContent>
