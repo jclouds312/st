@@ -12,7 +12,6 @@ import { usePathname } from 'next/navigation';
 
 import { MediFlowLogo } from '@/components/icons';
 import {
-  Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarMenu,
@@ -20,8 +19,6 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { cn } from '@/lib/utils';
-import { Button } from './ui/button';
 
 const links = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -46,16 +43,17 @@ export function AppNav() {
           <SidebarMenu>
             {links.map((link) => (
               <SidebarMenuItem key={link.href}>
-                <Link href={link.href} legacyBehavior passHref>
-                  <SidebarMenuButton
-                    className="w-full justify-start"
-                    isActive={pathname === link.href}
-                    tooltip={link.label}
-                  >
+                <SidebarMenuButton
+                  asChild
+                  className="w-full justify-start"
+                  isActive={pathname === link.href}
+                  tooltip={link.label}
+                >
+                  <Link href={link.href}>
                     <link.icon className="mr-2 h-4 w-4" />
                     <span>{link.label}</span>
-                  </SidebarMenuButton>
-                </Link>
+                  </Link>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
@@ -63,15 +61,17 @@ export function AppNav() {
         <SidebarFooter className="border-t">
            <SidebarMenu>
              <SidebarMenuItem>
-               <Link href="/settings" legacyBehavior passHref>
-                 <SidebarMenuButton className="w-full justify-start"
+                <SidebarMenuButton
+                  asChild
+                  className="w-full justify-start"
                   isActive={pathname === '/settings'}
                   tooltip="Settings"
-                  >
+                >
+                  <Link href="/settings">
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Settings</span>
-                  </SidebarMenuButton>
-                </Link>
+                  </Link>
+                </SidebarMenuButton>
              </SidebarMenuItem>
            </SidebarMenu>
         </SidebarFooter>
