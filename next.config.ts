@@ -24,6 +24,13 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    // This is required to allow the Next.js dev server to accept requests from
+    // the Cloud Workstations and Code Server origins.
+    allowedDevOrigins: [
+      '*.cluster-dwvm25yncracsxpd26rcd5ja3m.cloudworkstations.dev',
+    ],
+  },
 };
 
 export default nextConfig;
