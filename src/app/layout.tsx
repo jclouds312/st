@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { Inter } from 'next/font/google';
 import { AuthProvider } from '@/context/auth-context';
 import { JotaiProvider } from '@/context/jotai-provider';
+import { ThemeProvider } from '@/context/theme-provider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -27,12 +28,19 @@ export default function RootLayout({
       <head>
       </head>
       <body className={cn('font-sans antialiased', 'min-h-screen bg-background')}>
-        <JotaiProvider>
-          <AuthProvider>
-              {children}
-              <Toaster />
-          </AuthProvider>
-        </JotaiProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <JotaiProvider>
+            <AuthProvider>
+                {children}
+                <Toaster />
+            </AuthProvider>
+          </JotaiProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

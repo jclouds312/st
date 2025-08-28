@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { SidebarTrigger } from './ui/sidebar';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
+import { ThemeToggle } from './theme-toggle';
 
 
 export function PageHeader() {
@@ -50,6 +51,7 @@ export function PageHeader() {
           className="w-full rounded-lg bg-secondary pl-8 md:w-[200px] lg:w-[336px]"
         />
       </div>
+      <ThemeToggle />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="secondary" size="icon" className="rounded-full">

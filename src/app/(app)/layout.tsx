@@ -8,6 +8,7 @@ import { SidebarProvider, Sidebar } from '@/components/ui/sidebar';
 import { AppNav } from '@/components/app-nav';
 import { PageHeader } from '@/components/page-header';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Footer } from '@/components/footer';
 
 export default function AppLayout({
   children,
@@ -48,11 +49,11 @@ export default function AppLayout({
           <Sidebar>
             <AppNav />
           </Sidebar>
-          <div className="flex flex-col md:ml-[var(--sidebar-width-icon)] lg:ml-[var(--sidebar-width)]">
+          <div className="flex flex-col min-h-screen md:ml-[var(--sidebar-width-icon)] lg:ml-[var(--sidebar-width)]">
             <PageHeader />
             <main className="flex-1 p-4 md:p-6">{children}</main>
+            <Footer />
           </div>
         </SidebarProvider>
   );
 }
-
