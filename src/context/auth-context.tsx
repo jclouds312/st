@@ -3,9 +3,21 @@
 
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { User, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
+
+// --- Demo Users ---
+const demoUsers = [
+  { email: 'doctor@mediflow.com' },
+  { email: 'admin@mediflow.com' },
+  { email: 'paciente@mediflow.com' },
+];
+const SHARED_PASSWORD = '123456';
+// --- End Demo Users ---
+
+
+type User = {
+    email: string;
+}
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -25,41 +37,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setIsLoading(false);
-    });
-
-    return () => unsubscribe();
+    // Check if user is logged in from a previous session
+    const loggedInUserEmail = localStorage.getItem('loggedInUser');
+    if (loggedInUserEmail) {
+      setUser({ email: loggedInUserEmail });
+    }
+    setIsLoading(false);
   }, []);
 
   const login = async (email: string, pass: string): Promise<boolean> => {
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-      return true;
-    } catch (error: any) {
-      console.error("Login Error:", error.code, error.message);
-      return false;
+    const foundUser = demoUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
+    if (foundUser && pass === SHARED_PASSWORD) {
+        setUser({ email: foundUser.email });
+        localStorage.setItem('loggedInUser', foundUser.email);
+        return true;
     }
+    return false;
   };
 
-  const register = async (email: string, pass:string): Promise<boolean> => {
-     try {
-      await createUserWithEmailAndPassword(auth, email, pass);
-      return true;
-    } catch (error: any) {
-      console.error("Register Error:", error.code, error.message);
-      toast({
-        variant: "destructive",
-        title: "Error de Registro",
-        description: "El correo electrónico ya está en uso o la contraseña es inválida."
-      })
-      return false;
-    }
+  const register = async (email: string, pass: string): Promise<boolean> => {
+     toast({
+        title: "Registro Deshabilitado",
+        description: "El registro no está disponible en el modo de demostración. Utilice uno de los usuarios de prueba.",
+     });
+     return false;
   };
 
   const logout = async () => {
-    await signOut(auth);
+    setUser(null);
+    localStorage.removeItem('loggedInUser');
     router.push('/login');
   };
 

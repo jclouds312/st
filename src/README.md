@@ -12,19 +12,15 @@ npm run dev
 
 Open [http://localhost:9002](http://localhost:9002) with your browser to see the result.
 
-## Authentication and Database
+## Demo Users
 
-This project is configured to use **Firebase Authentication** for user management and **Firestore** as its database.
+You can use the following credentials to log in and explore the application:
 
-### How it Works
+-   **Email**: `doctor@mediflow.com`
+-   **Email**: `admin@mediflow.com`
+-   **Email**: `paciente@mediflow.com`
+-   **Password (for all users)**: `123456`
 
-- **Firebase Backend**: The authentication and database logic is handled by Firebase services. User data, appointments, and patient records are stored securely in Firestore.
-- **Login/Register Pages**: The `login` and `register` pages interact directly with Firebase Authentication.
-- **Protected Routes**: The main application pages are protected. Unauthenticated users will be redirected to the `/login` page.
-- **Auth Context**: An `AuthContext` (`src/context/auth-context.tsx`) manages and provides the authentication state across the application by communicating with Firebase.
+## Database
 
-### **IMPORTANT: Firebase Setup**
-
-You must have a Firebase project set up and have the correct configuration in `src/lib/firebase.ts`. The application expects to find collections for `patients` and `appointments` in your Firestore database.
-
-If you need to seed your database with initial data, you can do so directly from the Firebase Console.
+This project is configured to use **Firestore** as its database. Patient and appointment data is stored securely in your Firebase project's Firestore database.
