@@ -81,7 +81,7 @@ export default function LoginPage() {
        <Card className="mx-auto max-w-sm w-full">
         <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-                <MediFlowLogo className="h-12 w-12 text-primary" />
+                <MediFlowLogo className="h-16 w-16 text-primary" />
             </div>
           <CardTitle className="text-2xl">Iniciar Sesión</CardTitle>
           <CardDescription>
@@ -133,4 +133,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
