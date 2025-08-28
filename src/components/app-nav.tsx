@@ -7,7 +7,7 @@ import {
   LayoutDashboard,
   MessageSquare,
   Settings,
-  ClipboardUser,
+  Users,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -25,7 +25,7 @@ import {
 const links = [
   { href: '/dashboard', label: 'Panel de Control', icon: LayoutDashboard },
   { href: '/appointments', label: 'Citas', icon: CalendarDays },
-  { href: '/patients', label: 'Pacientes', icon: ClipboardUser },
+  { href: '/patients', label: 'Pacientes', icon: Users },
   { href: '/whatsapp', label: 'WhatsApp', icon: MessageSquare },
   { href: '/courses', label: 'Capacitación', icon: BookText },
   { href: '/payments', label: 'Pagos', icon: CreditCard },
