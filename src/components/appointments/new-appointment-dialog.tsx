@@ -1,16 +1,9 @@
-
 'use client';
 
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-
-import { useSetAtom } from 'jotai';
-import { Appointment, addAppointmentAtom } from '@/lib/state';
-
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -37,143 +30,168 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
+import { addAppointmentAtom, Appointment } from '@/lib/state';
+import { useSetAtom } from 'jotai';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
-  name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres.'),
-  date: z.date({
-    required_error: 'La fecha es requerida.',
-  }),
-  time: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Formato de hora inválido (HH:MM).'),
-  type: z.string().min(1, 'El tipo de cita es requerido.'),
+  name: z.string().min(2, 'El nombre del paciente es requerido.'),
+  type: z.string({ required_error: 'El tipo de cita es requerido.' }),
+  date: z.date({ required_error: 'La fecha es requerida.' }),
+  time: z.string({ required_error: 'La hora es requerida.' }),
   status: z.enum(['Confirmada', 'Pendiente', 'Cancelada']),
 });
 
-type NewAppointmentDialogValues = z.infer<typeof formSchema>;
+const availableTimes = [
+  '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
+  '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM',
+];
 
-export function NewAppointmentDialog({ children }: { children: React.ReactNode }) {
+export function NewAppointmentDialog({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const addAppointment = useSetAtom(addAppointmentAtom);
   const { toast } = useToast();
+  const addAppointment = useSetAtom(addAppointmentAtom);
 
-  const form = useForm<NewAppointmentDialogValues>({
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      time: '',
-      type: 'Consulta',
-      status: 'Confirmada',
+      status: 'Pendiente',
     },
   });
 
-  const onSubmit = async (data: NewAppointmentDialogValues) => {
-    // Convert 24h to 12h format for display
-     const [hour, minute] = data.time.split(':');
-     const ampm = parseInt(hour) >= 12 ? 'PM' : 'AM';
-     const formattedHour = parseInt(hour) % 12 || 12;
-     const displayTime = `${formattedHour.toString().padStart(2, '0')}:${minute} ${ampm}`;
-
-
-    const newAppointment: Omit<Appointment, 'id'> = {
-      ...data,
-      time: displayTime,
-    };
-
-    await addAppointment(newAppointment);
-
-    toast({
-      title: 'Cita Agendada',
-      description: `Se ha agendado una cita para ${data.name} el ${format(data.date, 'PPP', { locale: es })}.`,
-    });
-
-    form.reset();
-    setIsOpen(false);
-  };
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+        await addAppointment(values as Omit<Appointment, 'id'>);
+        toast({
+            title: 'Cita Agendada',
+            description: `La cita para ${values.name} ha sido creada exitosamente.`,
+        });
+        setIsOpen(false);
+        form.reset();
+    } catch (error) {
+        toast({
+            variant: 'destructive',
+            title: 'Error al Agendar',
+            description: 'No se pudo crear la cita. Inténtalo de nuevo.',
+        });
+    }
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Agendar Cita Manualmente</DialogTitle>
+          <DialogTitle>Agendar Nueva Cita Manualmente</DialogTitle>
           <DialogDescription>
-            Complete los detalles a continuación para registrar una nueva cita.
+            Completa los detalles para crear una nueva cita.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
+             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nombre del Paciente</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nombre completo" {...field} />
+                    <Input placeholder="Ej., Ana López" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tipo de Cita</FormLabel>
+                   <Select onValueChange={field.onChange} defaultValue={field.value}>
+                     <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Selecciona un tipo" />
+                        </SelectTrigger>
+                     </FormControl>
+                     <SelectContent>
+                        <SelectItem value="Consulta">Consulta</SelectItem>
+                        <SelectItem value="Revisión">Revisión</SelectItem>
+                        <SelectItem value="Seguimiento">Seguimiento</SelectItem>
+                        <SelectItem value="Urgencia">Urgencia</SelectItem>
+                     </SelectContent>
+                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="grid grid-cols-2 gap-4">
-               <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Fecha</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={'outline'}
-                            className={cn(
-                              'w-full pl-3 text-left font-normal',
-                              !field.value && 'text-muted-foreground'
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, 'PPP', { locale: es })
-                            ) : (
-                              <span>Seleccione una fecha</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() - 1))}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-               <FormField
+                 <FormField
+                  control={form.control}
+                  name="date"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Fecha</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                           <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP", { locale: es })
+                              ) : (
+                                <span>Elige una fecha</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                           </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() - 1))}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
                   control={form.control}
                   name="time"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Hora (HH:MM)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="14:30" {...field} />
-                      </FormControl>
+                      <FormLabel>Hora</FormLabel>
+                       <Select onValueChange={field.onChange} defaultValue={field.value}>
+                         <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Elige una hora" />
+                            </SelectTrigger>
+                         </FormControl>
+                         <SelectContent>
+                            {availableTimes.map(time => (
+                                <SelectItem key={time} value={time}>{time}</SelectItem>
+                            ))}
+                         </SelectContent>
+                       </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -181,50 +199,29 @@ export function NewAppointmentDialog({ children }: { children: React.ReactNode }
             </div>
              <FormField
               control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tipo de Cita</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccione un tipo" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Consulta">Consulta</SelectItem>
-                      <SelectItem value="Revisión">Revisión</SelectItem>
-                      <SelectItem value="Seguimiento">Seguimiento</SelectItem>
-                      <SelectItem value="Procedimiento">Procedimiento</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="status"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Estado</FormLabel>
                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccione un estado" />
-                      </Trigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Confirmada">Confirmada</SelectItem>
-                      <SelectItem value="Pendiente">Pendiente</SelectItem>
-                      <SelectItem value="Cancelada">Cancelada</SelectItem>
-                    </SelectContent>
-                  </Select>
+                     <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Selecciona un estado" />
+                        </SelectTrigger>
+                     </FormControl>
+                     <SelectContent>
+                        <SelectItem value="Confirmada">Confirmada</SelectItem>
+                        <SelectItem value="Pendiente">Pendiente</SelectItem>
+                        <SelectItem value="Cancelada">Cancelada</SelectItem>
+                     </SelectContent>
+                   </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>Cancelar</Button>
               <Button type="submit">Agendar Cita</Button>
             </DialogFooter>
           </form>

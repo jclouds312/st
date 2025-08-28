@@ -20,7 +20,6 @@ import { WhatsAppIcon } from '@/components/whatsapp-icon';
 import { useRouter } from 'next/navigation';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { appointmentsAtom, getAppointmentsAtom } from '@/lib/state';
-import { NewAppointmentDialog } from '@/components/appointments/new-appointment-dialog';
 import { CalendarPlus } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -107,12 +106,6 @@ export default function AppointmentsPage() {
                       Un resumen de tus citas confirmadas.
                     </CardDescription>
                 </div>
-                <NewAppointmentDialog>
-                    <Button size="icon" variant="outline">
-                        <CalendarPlus className="h-5 w-5" />
-                        <span className="sr-only">Agendar Cita Manualmente</span>
-                    </Button>
-                </NewAppointmentDialog>
             </div>
           </CardHeader>
           <CardContent className="space-y-4 max-h-[60vh] overflow-y-auto">
