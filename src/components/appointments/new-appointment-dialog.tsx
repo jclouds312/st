@@ -57,14 +57,14 @@ const formSchema = z.object({
   status: z.enum(['Confirmada', 'Pendiente', 'Cancelada']),
 });
 
-type ManualAppointmentFormValues = z.infer<typeof formSchema>;
+type NewAppointmentDialogValues = z.infer<typeof formSchema>;
 
-export function ManualAppointmentForm({ children }: { children: React.ReactNode }) {
+export function NewAppointmentDialog({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const addAppointment = useSetAtom(addAppointmentAtom);
   const { toast } = useToast();
 
-  const form = useForm<ManualAppointmentFormValues>({
+  const form = useForm<NewAppointmentDialogValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
@@ -74,7 +74,7 @@ export function ManualAppointmentForm({ children }: { children: React.ReactNode 
     },
   });
 
-  const onSubmit = async (data: ManualAppointmentFormValues) => {
+  const onSubmit = async (data: NewAppointmentDialogValues) => {
     // Convert 24h to 12h format for display
      const [hour, minute] = data.time.split(':');
      const ampm = parseInt(hour) >= 12 ? 'PM' : 'AM';
